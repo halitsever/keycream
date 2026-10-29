@@ -13,3 +13,8 @@ DerivedData/
 
 # macOS
 .DS_Store
+
+# Website
+docs/node_modules/
+docs/.vitepress/dist/
+docs/.vitepress/cache/

@@ -1,0 +1,165 @@
+:root {
+  --espresso: #2a1f1a;
+  --roast: #3a2c24;
+  --crema: #4a382d;
+  --cream: #f4ebd9;
+  --cream-shade: #d8c8a8;
+  --caramel: #c8874a;
+  --caramel-deep: #b0703a;
+  --caramel-light: #e0a46b;
+
+  --bg: var(--cream);
+  --surface: #ebe0c9;
+  --text: var(--espresso);
+  --text-muted: #5e4c40;
+  --accent: var(--caramel-deep);
+  --rule: rgba(42, 31, 26, 0.16);
+  --button-bg: var(--espresso);
+  --button-text: var(--cream);
+
+  --font: 'Bricolage Grotesque Variable', ui-sans-serif, system-ui, sans-serif;
+  --font-mono: ui-monospace, 'SF Mono', Menlo, monospace;
+  --measure: 66ch;
+  --page: 1120px;
+  --gutter: clamp(1rem, 4vw, 2.5rem);
+  --header-height: 64px;
+
+  color-scheme: light;
+}
+
+.dark {
+  --bg: var(--espresso);
+  --surface: var(--roast);
+  --text: var(--cream);
+  --text-muted: rgba(244, 235, 217, 0.7);
+  --accent: var(--caramel-light);
+  --rule: rgba(244, 235, 217, 0.14);
+  --button-bg: var(--caramel);
+  --button-text: var(--espresso);
+
+  color-scheme: dark;
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html {
+  -webkit-text-size-adjust: 100%;
+  scroll-padding-top: calc(var(--header-height) + 1rem);
+}
+
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--text);
+  font-family: var(--font);
+  font-size: 1.0625rem;
+  line-height: 1.6;
+  font-optical-sizing: auto;
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+
+img,
+svg {
+  display: block;
+  max-width: 100%;
+}
+
+a {
+  color: inherit;
+}
+
+button {
+  font: inherit;
+  color: inherit;
+}
+
+:focus-visible {
+  outline: 2px solid var(--caramel);
+  outline-offset: 3px;
+  border-radius: 6px;
+}
+
+h1,
+h2,
+h3 {
+  line-height: 1.08;
+  letter-spacing: -0.015em;
+  text-wrap: balance;
+  margin: 0;
+}
+
+p {
+  text-wrap: pretty;
+}
+
+.container {
+  width: 100%;
+  max-width: calc(var(--page) + 2 * var(--gutter));
+  margin: 0 auto;
+  padding: 0 var(--gutter);
+}
+
+.visually-hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+}
+
+/* Buttons share one shape: a keycap seen from above, with a deeper edge at the bottom. */
+.button {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.6em;
+  padding: 0.8em 1.35em 0.85em;
+  border: 0;
+  border-radius: 12px;
+  background: var(--button-bg);
+  color: var(--button-text);
+  font-weight: 650;
+  font-size: 1.0625rem;
+  line-height: 1;
+  text-decoration: none;
+  cursor: pointer;
+  box-shadow: inset 0 -3px 0 rgba(0, 0, 0, 0.22);
+  transition: transform 80ms ease, box-shadow 80ms ease;
+}
+
+.button:active {
+  transform: translateY(2px);
+  box-shadow: inset 0 -1px 0 rgba(0, 0, 0, 0.22);
+}
+
+.button-quiet {
+  background: transparent;
+  color: var(--text);
+  box-shadow: inset 0 0 0 1.5px var(--rule);
+}
+
+.button-quiet:active {
+  box-shadow: inset 0 0 0 1.5px var(--rule);
+}
+
+.button svg {
+  width: 1.05em;
+  height: 1.05em;
+  flex: none;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
