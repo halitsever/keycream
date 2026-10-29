@@ -1,0 +1,1 @@
+"NSInputMonitoringUsageDescription" = "KeyCreamはキーを押したときに音を鳴らすため、キーボードイベントを監視します。入力した内容が保存・送信されることはありません。";

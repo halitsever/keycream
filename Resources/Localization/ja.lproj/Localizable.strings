@@ -1,0 +1,12 @@
+"sounds_enabled" = "サウンドをオン";
+"volume" = "音量";
+"volume_low" = "小";
+"volume_medium" = "中";
+"volume_high" = "大";
+"launch_at_login" = "ログイン時に開く";
+"sound_pack_failed" = "サウンドパックを読み込めませんでした";
+"grant_permission" = "入力監視へのアクセスを許可…";
+"quit" = "終了";
+"language" = "言語";
+"language_system" = "システムの言語";
+"sound_pack" = "サウンドパック";

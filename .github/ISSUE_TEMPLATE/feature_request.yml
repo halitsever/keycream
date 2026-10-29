@@ -1,0 +1,20 @@
+name: Feature request
+description: Suggest an idea or a new sound pack
+labels: [enhancement]
+body:
+  - type: textarea
+    id: problem
+    attributes:
+      label: What would you like KeyCream to do?
+      description: Describe the idea and the problem it solves.
+    validations:
+      required: true
+  - type: textarea
+    id: alternatives
+    attributes:
+      label: Alternatives you've considered
+  - type: textarea
+    id: sound-pack
+    attributes:
+      label: Sound pack details
+      description: If you're suggesting a sound pack, link it and its license. Only packs that allow redistribution can be included.

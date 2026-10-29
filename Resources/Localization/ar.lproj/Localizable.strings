@@ -1,0 +1,12 @@
+"sounds_enabled" = "تشغيل الأصوات";
+"volume" = "مستوى الصوت";
+"volume_low" = "منخفض";
+"volume_medium" = "متوسط";
+"volume_high" = "مرتفع";
+"launch_at_login" = "الفتح عند تسجيل الدخول";
+"sound_pack_failed" = "تعذّر تحميل حزمة الأصوات";
+"grant_permission" = "منح إذن مراقبة الإدخال…";
+"quit" = "إنهاء";
+"language" = "اللغة";
+"language_system" = "لغة النظام";
+"sound_pack" = "حزمة الأصوات";

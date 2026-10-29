@@ -1,0 +1,72 @@
+name: Release
+
+on:
+  push:
+    branches: [main]
+    # Documentation-only pushes don't change the app, so they don't cut a release.
+    paths-ignore:
+      - '**.md'
+      - 'LICENSE'
+      - 'assets/**'
+      - '.github/ISSUE_TEMPLATE/**'
+      - '.github/pull_request_template.md'
+      - '.vscode/**'
+      - '.prettierrc'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+# Two quick pushes must not race for the same version number.
+concurrency:
+  group: release
+  cancel-in-progress: false
+
+jobs:
+  release:
+    runs-on: macos-15
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Pick the next version
+        id: version
+        run: |
+          BASE=$(tr -d '[:space:]' < VERSION)
+          LAST=$(git tag --list "v$BASE.*" --sort=-v:refname | head -n1)
+          if [ -z "$LAST" ]; then PATCH=0; else PATCH=$(( ${LAST##*.} + 1 )); fi
+          echo "version=$BASE.$PATCH" >> "$GITHUB_OUTPUT"
+
+      - name: Build
+        env:
+          UNIVERSAL: '1'
+          VERSION: ${{ steps.version.outputs.version }}
+          BUILD_NUMBER: ${{ github.run_number }}
+        run: ./build.sh
+
+      - name: Package
+        id: package
+        run: |
+          ZIP="KeyCream-${{ steps.version.outputs.version }}.zip"
+          ditto -c -k --sequesterRsrc --keepParent build/KeyCream.app "build/$ZIP"
+          echo "zip=build/$ZIP" >> "$GITHUB_OUTPUT"
+          echo "sha256=$(shasum -a 256 "build/$ZIP" | cut -d' ' -f1)" >> "$GITHUB_OUTPUT"
+
+      - name: Publish release
+        env:
+          GH_TOKEN: ${{ github.token }}
+          VERSION: ${{ steps.version.outputs.version }}
+        run: |
+          cat > notes.md <<EOF
+          Download **KeyCream-$VERSION.zip** below, unzip it and move KeyCream to your Applications folder. Runs on macOS 14 or later, Apple Silicon and Intel.
+
+          The app is not notarized, so macOS blocks the first launch. See [Installation](https://github.com/halitsever/keycream#installation) for the one-time steps.
+
+          SHA-256: \`${{ steps.package.outputs.sha256 }}\`
+          EOF
+          gh release create "v$VERSION" "${{ steps.package.outputs.zip }}" \
+            --title "KeyCream $VERSION" \
+            --notes "$(cat notes.md)" \
+            --generate-notes \
+            --target "$GITHUB_SHA"

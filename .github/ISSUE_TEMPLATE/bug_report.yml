@@ -1,0 +1,58 @@
+name: Bug report
+description: Something doesn't work as expected
+labels: [bug]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for taking the time to report a bug. If no sound plays at all, first check that KeyCream is enabled under **System Settings → Privacy & Security → Input Monitoring**.
+  - type: textarea
+    id: what-happened
+    attributes:
+      label: What happened?
+      description: Describe the problem and what you expected instead.
+    validations:
+      required: true
+  - type: textarea
+    id: steps
+    attributes:
+      label: Steps to reproduce
+      placeholder: |
+        1. Select the Cherry MX Blue sound pack
+        2. Type in any app
+        3. ...
+    validations:
+      required: true
+  - type: input
+    id: keycream-version
+    attributes:
+      label: KeyCream version
+      description: The release you installed, for example 0.1.3.
+    validations:
+      required: true
+  - type: input
+    id: macos-version
+    attributes:
+      label: macOS version
+      placeholder: macOS 15.2
+    validations:
+      required: true
+  - type: dropdown
+    id: chip
+    attributes:
+      label: Mac chip
+      options:
+        - Apple Silicon (M1 or later)
+        - Intel
+    validations:
+      required: true
+  - type: input
+    id: sound-pack
+    attributes:
+      label: Sound pack
+      description: Which pack was selected, if relevant.
+  - type: textarea
+    id: extra
+    attributes:
+      label: Anything else?
+      description: Screenshots, keyboard model, audio device, or other details.

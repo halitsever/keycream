@@ -1,0 +1,12 @@
+"sounds_enabled" = "사운드 켜기";
+"volume" = "음량";
+"volume_low" = "낮음";
+"volume_medium" = "중간";
+"volume_high" = "높음";
+"launch_at_login" = "로그인 시 열기";
+"sound_pack_failed" = "사운드 팩을 불러올 수 없습니다";
+"grant_permission" = "입력 모니터링 권한 허용…";
+"quit" = "종료";
+"language" = "언어";
+"language_system" = "시스템 언어";
+"sound_pack" = "사운드 팩";
