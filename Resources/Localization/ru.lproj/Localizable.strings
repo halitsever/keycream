@@ -1,0 +1,12 @@
+"sounds_enabled" = "Звуки включены";
+"volume" = "Громкость";
+"volume_low" = "Тихо";
+"volume_medium" = "Средне";
+"volume_high" = "Громко";
+"launch_at_login" = "Открывать при входе";
+"sound_pack_failed" = "Не удалось загрузить звуковой пакет";
+"grant_permission" = "Разрешить мониторинг ввода…";
+"quit" = "Завершить";
+"language" = "Язык";
+"language_system" = "Язык системы";
+"sound_pack" = "Звуковой пакет";

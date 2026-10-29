@@ -1,0 +1,12 @@
+"sounds_enabled" = "Sesler açık";
+"volume" = "Ses seviyesi";
+"volume_low" = "Düşük";
+"volume_medium" = "Orta";
+"volume_high" = "Yüksek";
+"launch_at_login" = "Girişte aç";
+"sound_pack_failed" = "Ses paketi yüklenemedi";
+"grant_permission" = "Giriş İzleme izni ver…";
+"quit" = "Çıkış";
+"language" = "Dil";
+"language_system" = "Sistem dili";
+"sound_pack" = "Ses paketi";

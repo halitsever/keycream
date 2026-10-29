@@ -1,0 +1,12 @@
+"sounds_enabled" = "开启声音";
+"volume" = "音量";
+"volume_low" = "低";
+"volume_medium" = "中";
+"volume_high" = "高";
+"launch_at_login" = "登录时打开";
+"sound_pack_failed" = "无法载入声音包";
+"grant_permission" = "授予输入监控权限…";
+"quit" = "退出";
+"language" = "语言";
+"language_system" = "系统语言";
+"sound_pack" = "声音包";

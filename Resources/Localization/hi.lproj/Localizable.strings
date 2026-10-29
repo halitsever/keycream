@@ -1,0 +1,12 @@
+"sounds_enabled" = "ध्वनि चालू";
+"volume" = "वॉल्यूम";
+"volume_low" = "कम";
+"volume_medium" = "मध्यम";
+"volume_high" = "तेज़";
+"launch_at_login" = "लॉगिन पर खोलें";
+"sound_pack_failed" = "साउंड पैक लोड नहीं हो सका";
+"grant_permission" = "इनपुट मॉनिटरिंग की अनुमति दें…";
+"quit" = "बंद करें";
+"language" = "भाषा";
+"language_system" = "सिस्टम भाषा";
+"sound_pack" = "साउंड पैक";

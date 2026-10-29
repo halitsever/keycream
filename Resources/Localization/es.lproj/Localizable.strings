@@ -1,0 +1,12 @@
+"sounds_enabled" = "Sonidos activados";
+"volume" = "Volumen";
+"volume_low" = "Bajo";
+"volume_medium" = "Medio";
+"volume_high" = "Alto";
+"launch_at_login" = "Abrir al iniciar sesión";
+"sound_pack_failed" = "No se pudo cargar el paquete de sonidos";
+"grant_permission" = "Permitir la monitorización de entrada…";
+"quit" = "Salir";
+"language" = "Idioma";
+"language_system" = "Idioma del sistema";
+"sound_pack" = "Paquete de sonidos";

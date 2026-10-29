@@ -1,0 +1,1 @@
+"NSInputMonitoringUsageDescription" = "KeyCream은 키를 누를 때 소리를 재생하기 위해 키보드 이벤트를 감지합니다. 입력한 내용은 저장되거나 전송되지 않습니다.";

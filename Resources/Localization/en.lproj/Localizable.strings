@@ -1,0 +1,12 @@
+"sounds_enabled" = "Sounds On";
+"volume" = "Volume";
+"volume_low" = "Low";
+"volume_medium" = "Medium";
+"volume_high" = "High";
+"launch_at_login" = "Open at Login";
+"sound_pack_failed" = "Couldn’t load sound pack";
+"grant_permission" = "Grant Input Monitoring Access…";
+"quit" = "Quit";
+"language" = "Language";
+"language_system" = "System Language";
+"sound_pack" = "Sound Pack";
