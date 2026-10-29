@@ -25,6 +25,12 @@ concurrency:
 jobs:
   release:
     runs-on: macos-15
+    env:
+      MACOS_CERTIFICATE_P12: ${{ secrets.MACOS_CERTIFICATE_P12 }}
+      MACOS_CERTIFICATE_PASSWORD: ${{ secrets.MACOS_CERTIFICATE_PASSWORD }}
+      APPLE_API_KEY_P8: ${{ secrets.APPLE_API_KEY_P8 }}
+      APPLE_API_KEY_ID: ${{ secrets.APPLE_API_KEY_ID }}
+      APPLE_API_ISSUER_ID: ${{ secrets.APPLE_API_ISSUER_ID }}
     steps:
       - uses: actions/checkout@v4
         with:
@@ -38,12 +44,58 @@ jobs:
           if [ -z "$LAST" ]; then PATCH=0; else PATCH=$(( ${LAST##*.} + 1 )); fi
           echo "version=$BASE.$PATCH" >> "$GITHUB_OUTPUT"
 
+      - name: Import signing certificate
+        id: signing
+        run: |
+          if [ -z "$MACOS_CERTIFICATE_P12" ]; then
+            echo "::warning::No signing certificate configured, the release will be ad-hoc signed and not notarized."
+            echo "identity=-" >> "$GITHUB_OUTPUT"
+            exit 0
+          fi
+          KEYCHAIN="$RUNNER_TEMP/signing.keychain-db"
+          KEYCHAIN_PASSWORD=$(uuidgen)
+          echo "$MACOS_CERTIFICATE_P12" | base64 --decode > "$RUNNER_TEMP/certificate.p12"
+          security create-keychain -p "$KEYCHAIN_PASSWORD" "$KEYCHAIN"
+          security set-keychain-settings -lut 21600 "$KEYCHAIN"
+          security unlock-keychain -p "$KEYCHAIN_PASSWORD" "$KEYCHAIN"
+          security import "$RUNNER_TEMP/certificate.p12" -P "$MACOS_CERTIFICATE_PASSWORD" -A -t cert -f pkcs12 -k "$KEYCHAIN"
+          security set-key-partition-list -S apple-tool:,apple: -k "$KEYCHAIN_PASSWORD" "$KEYCHAIN" > /dev/null
+          security list-keychains -d user -s "$KEYCHAIN" $(security list-keychains -d user | tr -d '"')
+          rm "$RUNNER_TEMP/certificate.p12"
+          IDENTITY=$(security find-identity -v -p codesigning "$KEYCHAIN" | awk -F'"' '/Developer ID Application/ { print $2; exit }')
+          if [ -z "$IDENTITY" ]; then
+            echo "::error::The certificate in MACOS_CERTIFICATE_P12 is not a Developer ID Application certificate."
+            exit 1
+          fi
+          echo "identity=$IDENTITY" >> "$GITHUB_OUTPUT"
+
       - name: Build
         env:
           UNIVERSAL: '1'
           VERSION: ${{ steps.version.outputs.version }}
           BUILD_NUMBER: ${{ github.run_number }}
+          SIGN_IDENTITY: ${{ steps.signing.outputs.identity }}
         run: ./build.sh
+
+      - name: Notarize
+        id: notarize
+        if: steps.signing.outputs.identity != '-'
+        run: |
+          KEY="$RUNNER_TEMP/AuthKey.p8"
+          echo "$APPLE_API_KEY_P8" | base64 --decode > "$KEY"
+          AUTH=(--key "$KEY" --key-id "$APPLE_API_KEY_ID" --issuer "$APPLE_API_ISSUER_ID")
+          ditto -c -k --keepParent build/KeyCream.app "$RUNNER_TEMP/notarize.zip"
+          RESULT=$(xcrun notarytool submit "$RUNNER_TEMP/notarize.zip" "${AUTH[@]}" --wait --timeout 30m --output-format json)
+          STATUS=$(echo "$RESULT" | python3 -c 'import json, sys; print(json.load(sys.stdin).get("status", ""))')
+          if [ "$STATUS" != "Accepted" ]; then
+            SUBMISSION=$(echo "$RESULT" | python3 -c 'import json, sys; print(json.load(sys.stdin).get("id", ""))')
+            echo "::error::Notarization finished with status '$STATUS'."
+            [ -n "$SUBMISSION" ] && xcrun notarytool log "$SUBMISSION" "${AUTH[@]}"
+            exit 1
+          fi
+          xcrun stapler staple build/KeyCream.app
+          rm "$KEY"
+          echo "notarized=true" >> "$GITHUB_OUTPUT"
 
       - name: Package
         id: package
@@ -57,16 +109,23 @@ jobs:
         env:
           GH_TOKEN: ${{ github.token }}
           VERSION: ${{ steps.version.outputs.version }}
+          NOTARIZED: ${{ steps.notarize.outputs.notarized }}
         run: |
-          cat > notes.md <<EOF
-          Download **KeyCream-$VERSION.zip** below, unzip it and move KeyCream to your Applications folder. Runs on macOS 14 or later, Apple Silicon and Intel.
-
-          The app is not notarized, so macOS blocks the first launch. See [Installation](https://github.com/halitsever/keycream#installation) for the one-time steps.
-
-          SHA-256: \`${{ steps.package.outputs.sha256 }}\`
-          EOF
+          {
+            echo "Download **KeyCream-$VERSION.zip** below, unzip it and move KeyCream to your Applications folder. Runs on macOS 14 or later, Apple Silicon and Intel."
+            echo
+            if [ "$NOTARIZED" != "true" ]; then
+              echo "This build is not notarized, so macOS blocks the first launch. See [Installation](https://github.com/halitsever/keycream#installation) for the one-time steps."
+              echo
+            fi
+            echo "SHA-256: \`${{ steps.package.outputs.sha256 }}\`"
+          } > notes.md
           gh release create "v$VERSION" "${{ steps.package.outputs.zip }}" \
             --title "KeyCream $VERSION" \
             --notes "$(cat notes.md)" \
             --generate-notes \
             --target "$GITHUB_SHA"
+
+      - name: Remove signing keychain
+        if: always()
+        run: security delete-keychain "$RUNNER_TEMP/signing.keychain-db" 2>/dev/null || true
