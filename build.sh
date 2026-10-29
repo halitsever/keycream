@@ -4,6 +4,8 @@
 #   UNIVERSAL=1    build for both Apple Silicon and Intel
 #   VERSION=1.2.3  CFBundleShortVersionString of the built app
 #   BUILD_NUMBER=7 CFBundleVersion of the built app
+#   SIGN_IDENTITY  codesign identity; defaults to a Developer ID Application certificate
+#                  from the keychain if there is one, "-" forces an ad-hoc signature
 set -euo pipefail
 cd "$(dirname "$0")"
 
@@ -40,6 +42,15 @@ done
 iconutil -c icns "$ICONSET" -o "$APP/Contents/Resources/AppIcon.icns"
 rm -rf "$ICONSET"
 
-# Ad-hoc signature. Input Monitoring is granted per signature, so a rebuild may need re-granting.
-codesign --force --sign - "$APP"
-echo "Built $APP"
+if [[ -z "${SIGN_IDENTITY:-}" ]]; then
+    SIGN_IDENTITY=$(security find-identity -v -p codesigning | awk -F'"' '/Developer ID Application/ { print $2; exit }')
+fi
+if [[ -z "$SIGN_IDENTITY" || "$SIGN_IDENTITY" == "-" ]]; then
+    # Input Monitoring is granted per ad-hoc signature, so every rebuild needs re-granting.
+    codesign --force --sign - "$APP"
+    echo "Built $APP (ad-hoc signed)"
+else
+    # Notarization requires the hardened runtime and a secure timestamp.
+    codesign --force --options runtime --timestamp --sign "$SIGN_IDENTITY" "$APP"
+    echo "Built $APP (signed by $SIGN_IDENTITY)"
+fi
