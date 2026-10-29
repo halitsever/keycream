@@ -12,7 +12,7 @@ Security problems should not go in a public issue. See [SECURITY.md](SECURITY.md
 
 ## Building from source
 
-You need macOS 14 or later and Xcode 15 or later (or a matching Swift toolchain).
+You need macOS 14 or later and Xcode 15.3 or later (or a Swift 5.10 toolchain).
 
 ```bash
 git clone https://github.com/halitsever/keycream.git

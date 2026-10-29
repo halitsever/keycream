@@ -11,6 +11,12 @@
 </p>
 
 <p align="center">
+  <a href="https://halitsever.github.io/keycream/"><b>Website</b></a> &nbsp;&nbsp;
+  <a href="https://halitsever.github.io/keycream/guide/installation"><b>Docs</b></a> &nbsp;&nbsp;
+  <a href="https://github.com/halitsever/keycream/releases/latest"><b>Download</b></a>
+</p>
+
+<p align="center">
   <a href="https://github.com/halitsever/keycream/releases/latest"><img src="https://img.shields.io/github/v/release/halitsever/keycream?label=release&color=C8874A" alt="Latest release"></a>
   <a href="https://github.com/halitsever/keycream/actions/workflows/release.yml"><img src="https://img.shields.io/github/actions/workflow/status/halitsever/keycream/release.yml?branch=main&label=build" alt="Build status"></a>
   <img src="https://img.shields.io/badge/macOS-14%2B-2A1F1A" alt="macOS 14 or later">
@@ -66,7 +72,7 @@ KeyCream reads the Mechvibes pack format, so other packs can be added under `Res
 
 ## Building from source
 
-Requires macOS 14 or later and Xcode 15 or later.
+Requires macOS 14 or later and Xcode 15.3 or later.
 
 ```bash
 git clone https://github.com/halitsever/keycream.git
