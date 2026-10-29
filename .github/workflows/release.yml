@@ -6,6 +6,8 @@ on:
     # Documentation-only pushes don't change the app, so they don't cut a release.
     paths-ignore:
       - '**.md'
+      - 'docs/**'
+      - '.github/workflows/docs.yml'
       - 'LICENSE'
       - 'assets/**'
       - '.github/ISSUE_TEMPLATE/**'
