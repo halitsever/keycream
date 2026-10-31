@@ -21,7 +21,7 @@ export default defineConfigWithTheme<ThemeConfig>({
     ['link', { rel: 'icon', href: '/keycream/favicon.ico', sizes: '32x32' }],
     ['link', { rel: 'icon', href: '/keycream/favicon.svg', type: 'image/svg+xml' }],
     ['link', { rel: 'apple-touch-icon', href: '/keycream/apple-touch-icon.png' }],
-    ['meta', { name: 'theme-color', content: '#17110D' }],
+    ['meta', { name: 'theme-color', content: '#09090B' }],
     ['meta', { property: 'og:type', content: 'website' }],
     ['meta', { property: 'og:site_name', content: 'KeyCream' }],
     ['meta', { property: 'og:image', content: `${site}app-icon.png` }],
@@ -47,7 +47,7 @@ export default defineConfigWithTheme<ThemeConfig>({
   },
 
   markdown: {
-    theme: { light: 'vitesse-light', dark: 'vitesse-dark' },
+    theme: { light: 'github-light-default', dark: 'github-dark-default' },
     container: {
       tipLabel: 'Tip',
       infoLabel: 'Good to know',

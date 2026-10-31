@@ -91,7 +91,7 @@ onBeforeUnmount(stop)
   border: 0;
   border-radius: 20px;
   text-align: left;
-  background: rgba(244, 235, 217, 0.03);
+  background: rgba(255, 255, 255, 0.03);
   box-shadow: inset 0 0 0 1px var(--line);
   cursor: pointer;
   transition: transform 0.25s ease, box-shadow 0.25s ease, background-color 0.25s ease;
@@ -99,14 +99,14 @@ onBeforeUnmount(stop)
 
 .sw:hover {
   transform: translateY(-3px);
-  background: rgba(244, 235, 217, 0.05);
+  background: rgba(255, 255, 255, 0.05);
 }
 
 .sw.on {
-  background: rgba(200, 135, 74, 0.08);
+  background: rgba(255, 255, 255, 0.06);
   box-shadow:
-    inset 0 0 0 2px var(--caramel),
-    0 14px 40px rgba(200, 135, 74, 0.2);
+    inset 0 0 0 2px var(--zinc-50),
+    0 14px 40px rgba(255, 255, 255, 0.06);
 }
 
 .art {
@@ -118,8 +118,8 @@ onBeforeUnmount(stop)
   margin-bottom: 16px;
   border-radius: 14px;
   background:
-    radial-gradient(60% 60% at 50% 45%, rgba(244, 235, 217, 0.07), transparent 70%),
-    #120c09;
+    radial-gradient(60% 60% at 50% 45%, rgba(255, 255, 255, 0.07), transparent 70%),
+    var(--zinc-950);
   box-shadow: inset 0 2px 12px rgba(0, 0, 0, 0.6);
 }
 
@@ -146,7 +146,7 @@ onBeforeUnmount(stop)
   width: 34px;
   height: 34px;
   border-radius: 50%;
-  background: rgba(244, 235, 217, 0.1);
+  background: rgba(255, 255, 255, 0.1);
   color: var(--text);
   backdrop-filter: blur(6px);
   -webkit-backdrop-filter: blur(6px);
@@ -155,8 +155,8 @@ onBeforeUnmount(stop)
 
 .sw:hover .badge,
 .sw.on .badge {
-  background: var(--cream);
-  color: var(--espresso);
+  background: var(--zinc-50);
+  color: var(--zinc-900);
 }
 
 .badge svg {
@@ -179,7 +179,7 @@ onBeforeUnmount(stop)
   width: 3px;
   height: 100%;
   border-radius: 2px;
-  background: var(--foam);
+  background: var(--zinc-50);
   transform-origin: bottom;
   animation: eq 0.8s ease-in-out infinite;
 }
@@ -246,8 +246,8 @@ onBeforeUnmount(stop)
 
 .add .art {
   background: transparent;
-  box-shadow: inset 0 0 0 1.5px rgba(244, 235, 217, 0.14);
-  background-image: repeating-linear-gradient(135deg, rgba(244, 235, 217, 0.04) 0 8px, transparent 8px 16px);
+  box-shadow: inset 0 0 0 1.5px rgba(255, 255, 255, 0.14);
+  background-image: repeating-linear-gradient(135deg, rgba(255, 255, 255, 0.04) 0 8px, transparent 8px 16px);
   color: var(--faint);
 }
 

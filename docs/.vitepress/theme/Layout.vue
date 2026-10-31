@@ -55,7 +55,7 @@ onBeforeUnmount(() => {
   height: 2px;
   transform: scaleX(0);
   transform-origin: 0 50%;
-  background: linear-gradient(90deg, var(--caramel), var(--foam));
+  background: linear-gradient(90deg, var(--zinc-500), var(--zinc-50));
 }
 
 .skip-link {
@@ -65,8 +65,8 @@ onBeforeUnmount(() => {
   z-index: 100;
   padding: 0.6rem 1rem;
   border-radius: 10px;
-  background: var(--cream);
-  color: var(--espresso);
+  background: var(--zinc-50);
+  color: var(--zinc-900);
   font-weight: 650;
 }
 

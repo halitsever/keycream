@@ -97,7 +97,7 @@ watch(() => route.path, () => requestAnimationFrame(update))
   padding: 6px 6px 6px 14px;
   border-radius: 999px;
   font-size: 0.9rem;
-  background: rgba(31, 23, 18, 0.66);
+  background: rgba(24, 24, 27, 0.66);
   backdrop-filter: blur(18px) saturate(1.4);
   -webkit-backdrop-filter: blur(18px) saturate(1.4);
   box-shadow:
@@ -133,7 +133,7 @@ watch(() => route.path, () => requestAnimationFrame(update))
 .l:hover,
 .l.on {
   color: var(--text);
-  background: rgba(244, 235, 217, 0.08);
+  background: rgba(255, 255, 255, 0.08);
 }
 
 .gh {
@@ -149,7 +149,7 @@ watch(() => route.path, () => requestAnimationFrame(update))
 
 .gh:hover {
   color: var(--text);
-  background: rgba(244, 235, 217, 0.08);
+  background: rgba(255, 255, 255, 0.08);
 }
 
 .gh svg {

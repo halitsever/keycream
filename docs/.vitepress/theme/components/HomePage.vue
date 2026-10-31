@@ -242,7 +242,7 @@ onBeforeUnmount(() => {
   overflow-x: clip;
 }
 
-/* The lamp: one warm pool of light behind the headline. */
+/* The lamp: one soft pool of light behind the headline. */
 .hero::before {
   content: '';
   position: absolute;
@@ -253,7 +253,7 @@ onBeforeUnmount(() => {
   transform: translateX(-50%);
   pointer-events: none;
   filter: blur(10px);
-  background: radial-gradient(closest-side, rgba(200, 135, 74, 0.32), rgba(200, 135, 74, 0.08) 55%, transparent);
+  background: radial-gradient(closest-side, rgba(255, 255, 255, 0.07), rgba(255, 255, 255, 0.02) 55%, transparent);
 }
 
 .hero-copy {
@@ -284,14 +284,14 @@ h1 {
   width: 8px;
   height: 8px;
   border-radius: 50%;
-  background: var(--caramel-light);
-  box-shadow: 0 0 0 4px rgba(224, 164, 107, 0.2);
+  background: var(--zinc-50);
+  box-shadow: 0 0 0 4px rgba(255, 255, 255, 0.2);
   animation: pulse 1.8s infinite;
 }
 
 @keyframes pulse {
   50% {
-    box-shadow: 0 0 0 8px rgba(224, 164, 107, 0);
+    box-shadow: 0 0 0 8px rgba(255, 255, 255, 0);
   }
 }
 
@@ -311,7 +311,7 @@ h1 {
   color: transparent;
   -webkit-background-clip: text;
   background-clip: text;
-  background-image: linear-gradient(100deg, var(--foam) 0%, var(--caramel-light) 45%, var(--caramel) 100%);
+  background-image: linear-gradient(100deg, var(--zinc-50) 0%, var(--zinc-300) 45%, var(--zinc-500) 100%);
 }
 
 .hero-lede {
@@ -369,7 +369,7 @@ h1 {
   width: 9px;
   height: 9px;
   border-radius: 3px;
-  background: var(--caramel);
+  background: var(--zinc-400);
   box-shadow: inset 0 -2px 0 rgba(0, 0, 0, 0.25);
 }
 
@@ -401,8 +401,8 @@ h1 {
   display: flex;
   flex-direction: column;
   background:
-    radial-gradient(90% 60% at 0% 0%, rgba(200, 135, 74, 0.16), transparent 70%),
-    linear-gradient(180deg, rgba(244, 235, 217, 0.05), rgba(244, 235, 217, 0.015));
+    radial-gradient(90% 60% at 0% 0%, rgba(255, 255, 255, 0.06), transparent 70%),
+    linear-gradient(180deg, rgba(255, 255, 255, 0.05), rgba(255, 255, 255, 0.015));
 }
 
 .privacy h3 {
@@ -439,9 +439,9 @@ h1 {
   height: 22px;
   padding: 4px;
   border-radius: 50%;
-  background: rgba(244, 235, 217, 0.08);
+  background: rgba(255, 255, 255, 0.08);
   fill: none;
-  stroke: var(--caramel-light);
+  stroke: var(--text);
   stroke-width: 2;
   stroke-linecap: round;
 }
@@ -476,7 +476,7 @@ h1 {
   padding: 7px 13px;
   border-radius: 999px;
   font-size: 0.92rem;
-  background: rgba(244, 235, 217, 0.06);
+  background: rgba(255, 255, 255, 0.06);
   box-shadow: inset 0 0 0 1px var(--line);
 }
 
@@ -508,12 +508,12 @@ h1 {
   width: 42px;
   height: 42px;
   border-radius: 11px;
-  background: linear-gradient(180deg, #fdf8ec, #efe2c7);
-  color: var(--espresso);
+  background: linear-gradient(180deg, #fafafa, #e4e4e7);
+  color: var(--zinc-900);
   font-weight: 700;
   box-shadow:
-    inset 0 -4px 0 var(--cream-shade),
-    0 4px 0 #7d6345,
+    inset 0 -4px 0 #d4d4d8,
+    0 4px 0 #71717a,
     0 8px 14px rgba(0, 0, 0, 0.4);
 }
 
@@ -531,7 +531,7 @@ h1 {
 .term {
   overflow: hidden;
   border-radius: 22px;
-  background: #110b08;
+  background: var(--zinc-900);
   box-shadow:
     0 0 0 1px var(--line),
     0 30px 80px rgba(0, 0, 0, 0.5);
@@ -550,7 +550,7 @@ h1 {
   width: 11px;
   height: 11px;
   border-radius: 50%;
-  background: #3e322b;
+  background: var(--zinc-700);
 }
 
 .term-bar span {
@@ -567,12 +567,12 @@ h1 {
   overflow-x: auto;
   font-size: 0.86rem;
   line-height: 2;
-  color: #e6dccb;
+  color: var(--zinc-200);
   white-space: pre;
 }
 
 .term .p {
-  color: var(--caramel-light);
+  color: var(--zinc-400);
   user-select: none;
 }
 
@@ -586,7 +586,7 @@ h1 {
   height: 16px;
   margin-left: 4px;
   vertical-align: -3px;
-  background: var(--caramel-light);
+  background: var(--zinc-50);
   animation: blink 1s steps(1) infinite;
 }
 
@@ -654,9 +654,9 @@ h1 {
   height: 26px;
   border-radius: 8px;
   background:
-    linear-gradient(var(--caramel-light), var(--caramel-light)) center / 10px 2px no-repeat,
-    linear-gradient(var(--caramel-light), var(--caramel-light)) center / 2px 10px no-repeat,
-    rgba(244, 235, 217, 0.06);
+    linear-gradient(var(--zinc-50), var(--zinc-50)) center / 10px 2px no-repeat,
+    linear-gradient(var(--zinc-50), var(--zinc-50)) center / 2px 10px no-repeat,
+    rgba(255, 255, 255, 0.06);
   transition: transform 0.2s ease;
 }
 

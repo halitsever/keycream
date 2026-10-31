@@ -66,7 +66,7 @@ function toggleMenu() {
             <rect x="10" y="12" width="100" height="98" rx="24" fill="#fff" />
             <path
               d="M39 18H81Q98 18 98 35V70Q98 80 88 80H86Q83 80 83 83V86A3 3 0 0 1 77 86V83Q77 80 74 80H71Q68 80 68 83V91A5 5 0 0 1 58 91V83Q58 80 55 80H50Q47 80 47 83V99.5A6.5 6.5 0 0 1 34 99.5V83Q34 80 31 80Q22 80 22 70V35Q22 18 39 18Z"
-              fill="#3a2c24"
+              fill="#18181b"
             />
           </svg>
         </button>
@@ -166,9 +166,9 @@ function toggleMenu() {
   overflow: hidden;
   border-radius: 26px;
   background:
-    radial-gradient(70% 90% at 88% 0%, rgba(224, 164, 107, 0.45), transparent 70%),
-    radial-gradient(90% 120% at 0% 100%, #4a2f3a 0%, transparent 60%),
-    linear-gradient(160deg, #3a281f 0%, #24170f 55%, #150e0a 100%);
+    radial-gradient(70% 90% at 88% 0%, rgba(255, 255, 255, 0.12), transparent 70%),
+    radial-gradient(90% 120% at 0% 100%, #3f3f46 0%, transparent 60%),
+    linear-gradient(160deg, #27272a 0%, #18181b 55%, #09090b 100%);
   box-shadow:
     0 0 0 1px var(--line),
     0 40px 100px rgba(0, 0, 0, 0.55);
@@ -228,8 +228,8 @@ function toggleMenu() {
   padding: 5px;
   border-radius: 11px;
   font-size: 13px;
-  color: #f2efe9;
-  background: rgba(44, 36, 31, 0.8);
+  color: #f4f4f5;
+  background: rgba(39, 39, 42, 0.8);
   backdrop-filter: blur(30px) saturate(1.6);
   -webkit-backdrop-filter: blur(30px) saturate(1.6);
   box-shadow:
@@ -283,7 +283,7 @@ function toggleMenu() {
 .mi:focus-visible {
   outline: none;
   color: #fff;
-  background: #a96a36;
+  background: var(--zinc-600);
 }
 
 .ck {
@@ -332,12 +332,12 @@ hr {
   max-width: 60%;
   font-family: var(--font);
   font-size: 0.92rem;
-  color: rgba(244, 235, 217, 0.72);
+  color: rgba(255, 255, 255, 0.72);
 }
 
 .desk-hint b {
   font-weight: 600;
-  color: var(--foam);
+  color: var(--zinc-50);
 }
 
 @media (max-width: 700px) {

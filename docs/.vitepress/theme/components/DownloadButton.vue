@@ -57,12 +57,12 @@ const details = computed(() => {
   border-radius: 999px;
   font-weight: 620;
   white-space: nowrap;
-  color: var(--espresso);
-  background: var(--cream);
+  color: var(--zinc-900);
+  background: var(--zinc-50);
   transition: background-color 0.2s;
 }
 
 .dl-compact:hover {
-  background: #fff6e6;
+  background: var(--zinc-200);
 }
 </style>

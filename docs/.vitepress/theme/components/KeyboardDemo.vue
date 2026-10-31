@@ -345,7 +345,7 @@ onBeforeUnmount(() => {
   height: 0.95em;
   margin-left: 0.06em;
   border-radius: 2px;
-  background: var(--caramel-light);
+  background: var(--zinc-50);
   animation: blink 1.1s steps(1) infinite;
 }
 
@@ -359,13 +359,13 @@ onBeforeUnmount(() => {
   position: relative;
 }
 
-/* A warm light under the case, as if the desk lamp hit the plate. */
+/* A soft light under the case, as if the desk lamp hit the plate. */
 .glow {
   position: absolute;
   inset: -14% -8% -24%;
   z-index: -1;
   pointer-events: none;
-  background: radial-gradient(closest-side, rgba(224, 164, 107, 0.34), rgba(200, 135, 74, 0.1) 60%, transparent);
+  background: radial-gradient(closest-side, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0.03) 60%, transparent);
   filter: blur(24px);
 }
 
@@ -373,9 +373,9 @@ onBeforeUnmount(() => {
   position: relative;
   padding: var(--pad);
   border-radius: calc(var(--unit) * 0.42);
-  background: linear-gradient(180deg, #3d2f27 0%, #2a1f1a 55%, #221914 100%);
+  background: linear-gradient(180deg, #3f3f46 0%, #27272a 55%, #18181b 100%);
   box-shadow:
-    inset 0 1px 0 rgba(255, 236, 210, 0.16),
+    inset 0 1px 0 rgba(255, 255, 255, 0.14),
     inset 0 -3px 6px rgba(0, 0, 0, 0.45),
     0 0 0 1px rgba(0, 0, 0, 0.55),
     0 calc(var(--unit) * 0.5) calc(var(--unit) * 1.1) rgba(0, 0, 0, 0.55),
@@ -393,7 +393,7 @@ onBeforeUnmount(() => {
 .plate {
   padding: calc(var(--gap) * 1.2) 0;
   border-radius: calc(var(--unit) * 0.22);
-  background: #110b08;
+  background: #09090b;
   box-shadow: inset 0 2px 10px rgba(0, 0, 0, 0.8);
 }
 
@@ -411,10 +411,10 @@ onBeforeUnmount(() => {
 }
 
 .key {
-  --skirt: linear-gradient(180deg, #e8dabd, #cbb48c);
-  --face: linear-gradient(180deg, #fdf8ec, #f1e5cc);
-  --edge: #7d6345;
-  --ink: #2a1f1a;
+  --skirt: linear-gradient(180deg, #d4d4d8, #a1a1aa);
+  --face: linear-gradient(180deg, #fafafa, #e4e4e7);
+  --edge: #71717a;
+  --ink: #18181b;
   position: relative;
   height: calc(var(--unit) - var(--gap));
   margin: 0 calc(var(--gap) / 2);
@@ -431,17 +431,17 @@ onBeforeUnmount(() => {
 }
 
 .mod {
-  --skirt: linear-gradient(180deg, #d3bb93, #b2966a);
-  --face: linear-gradient(180deg, #ead9bb, #dcc6a2);
-  --edge: #6b5136;
-  --ink: #4a382d;
+  --skirt: linear-gradient(180deg, #b4b4bb, #85858e);
+  --face: linear-gradient(180deg, #d4d4d8, #c2c2c8);
+  --edge: #52525b;
+  --ink: #3f3f46;
 }
 
 .accent {
-  --skirt: linear-gradient(180deg, #c98b53, #a46833);
-  --face: linear-gradient(180deg, #ebb179, #d4945a);
-  --edge: #6f431d;
-  --ink: #2a1f1a;
+  --skirt: linear-gradient(180deg, #3f3f46, #27272a);
+  --face: linear-gradient(180deg, #52525b, #3f3f46);
+  --edge: #09090b;
+  --ink: #fafafa;
 }
 
 .fn {
@@ -468,7 +468,7 @@ onBeforeUnmount(() => {
   background: var(--face);
   box-shadow:
     inset 0 1px 0 rgba(255, 255, 255, 0.75),
-    0 1px 2px rgba(80, 50, 20, 0.22);
+    0 1px 2px rgba(0, 0, 0, 0.18);
   font-size: max(9px, calc(var(--unit) * 0.29));
   font-weight: 620;
   line-height: 1;
@@ -514,11 +514,11 @@ onBeforeUnmount(() => {
 
 @keyframes wave {
   from {
-    box-shadow: 0 0 0 0 rgba(255, 220, 174, 0.75);
+    box-shadow: 0 0 0 0 rgba(255, 255, 255, 0.6);
   }
 
   to {
-    box-shadow: 0 0 0 calc(var(--unit) * 0.42) rgba(255, 220, 174, 0);
+    box-shadow: 0 0 0 calc(var(--unit) * 0.42) rgba(255, 255, 255, 0);
   }
 }
 
@@ -528,7 +528,7 @@ onBeforeUnmount(() => {
   left: calc(var(--unit) * 0.085);
   width: calc(100% - var(--unit) * 0.17);
   height: calc(var(--unit) * 0.6);
-  fill: #f6ecd8;
+  fill: #f4f4f5;
   overflow: visible;
   pointer-events: none;
   filter: drop-shadow(0 1px 1px rgba(0, 0, 0, 0.35));
@@ -568,7 +568,7 @@ onBeforeUnmount(() => {
   padding: 0 14px;
   border: 0;
   border-radius: 999px;
-  background: rgba(244, 235, 217, 0.06);
+  background: rgba(255, 255, 255, 0.06);
   box-shadow: inset 0 0 0 1px var(--line);
   font-size: 0.88rem;
   font-weight: 560;
@@ -576,7 +576,7 @@ onBeforeUnmount(() => {
 }
 
 .mute:hover {
-  background: rgba(244, 235, 217, 0.1);
+  background: rgba(255, 255, 255, 0.1);
 }
 
 .mute svg {

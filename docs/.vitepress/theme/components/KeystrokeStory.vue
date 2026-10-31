@@ -299,7 +299,7 @@ onBeforeUnmount(() => {
 
 .chap-nav button.on {
   color: var(--text);
-  border-color: var(--caramel);
+  border-color: var(--zinc-50);
 }
 
 .hint {
@@ -354,12 +354,12 @@ onBeforeUnmount(() => {
   padding: 40px;
   border-radius: 28px;
   background:
-    radial-gradient(70% 80% at 25% 30%, rgba(224, 164, 107, 0.16), transparent 70%),
-    linear-gradient(180deg, #221913, #18110d);
+    radial-gradient(70% 80% at 25% 30%, rgba(255, 255, 255, 0.06), transparent 70%),
+    linear-gradient(180deg, #18181b, #0f0f11);
   box-shadow:
     0 0 0 1px var(--line),
     0 40px 120px rgba(0, 0, 0, 0.55),
-    0 0 140px rgba(200, 135, 74, 0.1);
+    0 0 140px rgba(255, 255, 255, 0.03);
 }
 
 .rig-key {
@@ -374,9 +374,9 @@ onBeforeUnmount(() => {
   width: 78%;
   aspect-ratio: 1;
   border-radius: 18%;
-  background: linear-gradient(180deg, #e8dabd, #c7af86);
+  background: linear-gradient(180deg, #d4d4d8, #a1a1aa);
   box-shadow:
-    0 14px 0 #7d6345,
+    0 14px 0 #71717a,
     0 26px 40px rgba(0, 0, 0, 0.6);
   transition: transform 70ms ease-out, box-shadow 70ms ease-out;
 }
@@ -384,7 +384,7 @@ onBeforeUnmount(() => {
 .bigkey.down {
   transform: translateY(11px);
   box-shadow:
-    0 3px 0 #7d6345,
+    0 3px 0 #71717a,
     0 8px 14px rgba(0, 0, 0, 0.55);
 }
 
@@ -394,9 +394,9 @@ onBeforeUnmount(() => {
   display: grid;
   place-items: center;
   border-radius: 14%;
-  background: linear-gradient(180deg, #fdf8ec, #efe2c7);
+  background: linear-gradient(180deg, #fafafa, #e4e4e7);
   box-shadow: inset 0 2px 0 rgba(255, 255, 255, 0.8);
-  color: var(--espresso);
+  color: var(--zinc-900);
   font-size: clamp(2rem, 4.4vw, 3.6rem);
   font-weight: 700;
   letter-spacing: -0.03em;
@@ -412,11 +412,11 @@ onBeforeUnmount(() => {
 
 @keyframes ring {
   from {
-    box-shadow: 0 0 0 0 rgba(255, 220, 174, 0.6);
+    box-shadow: 0 0 0 0 rgba(255, 255, 255, 0.5);
   }
 
   to {
-    box-shadow: 0 0 0 46px rgba(255, 220, 174, 0);
+    box-shadow: 0 0 0 46px rgba(255, 255, 255, 0);
   }
 }
 
@@ -438,7 +438,7 @@ onBeforeUnmount(() => {
   bottom: 22px;
   width: 2px;
   border-radius: 2px;
-  background: linear-gradient(180deg, var(--caramel), rgba(200, 135, 74, 0.15));
+  background: linear-gradient(180deg, var(--zinc-400), rgba(161, 161, 170, 0.15));
 }
 
 .flow li {
@@ -450,7 +450,7 @@ onBeforeUnmount(() => {
   min-height: 56px;
   padding: 0 18px;
   border-radius: 14px;
-  background: rgba(244, 235, 217, 0.035);
+  background: rgba(255, 255, 255, 0.035);
   box-shadow: inset 0 0 0 1px var(--line);
   opacity: 0.38;
   transition: opacity 0.35s, box-shadow 0.35s, background-color 0.35s;
@@ -466,7 +466,7 @@ onBeforeUnmount(() => {
   margin-top: -5px;
   border-radius: 50%;
   background: var(--panel);
-  box-shadow: inset 0 0 0 2px var(--caramel);
+  box-shadow: inset 0 0 0 2px var(--zinc-400);
 }
 
 .flow li.lit {
@@ -474,10 +474,10 @@ onBeforeUnmount(() => {
 }
 
 .flow li.cur {
-  background: rgba(200, 135, 74, 0.1);
+  background: rgba(255, 255, 255, 0.06);
   box-shadow:
-    inset 0 0 0 1.5px rgba(224, 164, 107, 0.7),
-    0 10px 30px rgba(200, 135, 74, 0.15);
+    inset 0 0 0 1.5px rgba(255, 255, 255, 0.5),
+    0 10px 30px rgba(255, 255, 255, 0.05);
 }
 
 .name {
@@ -490,10 +490,6 @@ onBeforeUnmount(() => {
   font-size: 1.15rem;
   font-weight: 500;
   color: var(--text);
-}
-
-.cur .val {
-  color: var(--foam);
 }
 
 .flash {
@@ -511,7 +507,7 @@ onBeforeUnmount(() => {
 @keyframes flash {
   from {
     opacity: 1;
-    background: rgba(255, 220, 174, 0.12);
+    background: rgba(255, 255, 255, 0.1);
   }
 
   to {
@@ -529,16 +525,16 @@ onBeforeUnmount(() => {
   width: 10px;
   height: 10px;
   border-radius: 50%;
-  background: rgba(244, 235, 217, 0.12);
+  background: rgba(255, 255, 255, 0.12);
 }
 
 .voices i.hit {
-  background: rgba(224, 164, 107, 0.45);
+  background: rgba(255, 255, 255, 0.45);
 }
 
 .voices i.last {
-  background: var(--foam);
-  box-shadow: 0 0 10px rgba(255, 220, 174, 0.8);
+  background: var(--zinc-50);
+  box-shadow: 0 0 10px rgba(255, 255, 255, 0.7);
   animation: voice 0.6s ease-out;
 }
 
@@ -572,7 +568,7 @@ onBeforeUnmount(() => {
   flex: 1;
   min-height: 2px;
   border-radius: 2px;
-  background: linear-gradient(180deg, var(--foam), var(--caramel));
+  background: linear-gradient(180deg, var(--zinc-50), var(--zinc-500));
   transition: height 0.25s ease;
 }
 
@@ -685,7 +681,7 @@ onBeforeUnmount(() => {
 
   .bigkey {
     box-shadow:
-      0 8px 0 #7d6345,
+      0 8px 0 #71717a,
       0 14px 22px rgba(0, 0, 0, 0.6);
   }
 

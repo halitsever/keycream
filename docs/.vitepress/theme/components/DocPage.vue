@@ -81,7 +81,7 @@ watch(() => route.path, () => (menuOpen.value = false))
   transform: translateX(-50%);
   z-index: -1;
   pointer-events: none;
-  background: radial-gradient(closest-side, rgba(200, 135, 74, 0.16), transparent);
+  background: radial-gradient(closest-side, rgba(255, 255, 255, 0.06), transparent);
 }
 
 .sidebar {
@@ -125,14 +125,14 @@ watch(() => route.path, () => (menuOpen.value = false))
 
 .group a:hover {
   color: var(--text);
-  background: rgba(244, 235, 217, 0.05);
+  background: rgba(255, 255, 255, 0.05);
 }
 
 .group a.active {
   color: var(--text);
   font-weight: 560;
-  background: rgba(200, 135, 74, 0.12);
-  box-shadow: inset 2px 0 0 var(--caramel-light);
+  background: rgba(255, 255, 255, 0.08);
+  box-shadow: inset 2px 0 0 var(--zinc-50);
 }
 
 .article {
@@ -170,14 +170,14 @@ watch(() => route.path, () => (menuOpen.value = false))
   padding: 1.1rem 1.25rem;
   border-radius: 18px;
   font-weight: 600;
-  background: linear-gradient(180deg, rgba(244, 235, 217, 0.05), rgba(244, 235, 217, 0.015));
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.05), rgba(255, 255, 255, 0.015));
   box-shadow: inset 0 0 0 1px var(--line);
   transition: box-shadow 0.2s, transform 0.2s;
 }
 
 .pager-link:hover {
   transform: translateY(-2px);
-  box-shadow: inset 0 0 0 1.5px var(--caramel);
+  box-shadow: inset 0 0 0 1.5px var(--zinc-500);
 }
 
 .pager-link.next {
@@ -210,7 +210,7 @@ watch(() => route.path, () => (menuOpen.value = false))
     padding: 0.85rem 1.1rem;
     border: 0;
     border-radius: 14px;
-    background: rgba(244, 235, 217, 0.05);
+    background: rgba(255, 255, 255, 0.05);
     box-shadow: inset 0 0 0 1px var(--line);
     font-weight: 600;
     cursor: pointer;
