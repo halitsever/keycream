@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { useData, withBase } from 'vitepress'
 import type { ThemeConfig } from '../types'
+import LogoMark from './LogoMark.vue'
 
 const { theme } = useData<ThemeConfig>()
 const repoUrl = `https://github.com/${theme.value.repo}`
@@ -8,18 +9,19 @@ const repoUrl = `https://github.com/${theme.value.repo}`
 
 <template>
   <footer class="site-footer">
-    <div class="container footer-inner">
-      <div class="about">
-        <img :src="withBase('/app-icon.png')" alt="" width="44" height="44" />
-        <p>
-          KeyCream is free and open source under the <a :href="`${repoUrl}/blob/main/LICENSE`">MIT License</a>.
-          Sound packs come from <a href="https://github.com/hainguyents13/mechvibes">Mechvibes</a>.
-        </p>
-      </div>
+    <div class="wrap foot-row">
+      <a class="foot-brand" :href="withBase('/')">
+        <LogoMark />
+        KeyCream
+      </a>
+      <p class="license">
+        MIT. Sound packs from <a href="https://github.com/hainguyents13/mechvibes">Mechvibes</a>, under their own licenses.
+      </p>
       <nav class="links" aria-label="Footer">
         <a :href="withBase('/guide/installation')">Docs</a>
         <a :href="withBase('/guide/privacy')">Privacy</a>
         <a :href="`${repoUrl}/releases`">Releases</a>
+        <a :href="`${repoUrl}/issues`">Issues</a>
         <a :href="repoUrl">GitHub</a>
       </nav>
     </div>
@@ -28,54 +30,64 @@ const repoUrl = `https://github.com/${theme.value.repo}`
 
 <style scoped>
 .site-footer {
-  margin-top: clamp(5rem, 10vw, 8rem);
-  border-top: 1px solid var(--rule);
+  margin-top: 200px;
+  padding: 28px 0 40px;
+  border-top: 1px solid var(--line);
 }
 
-.footer-inner {
+.foot-row {
   display: flex;
   flex-wrap: wrap;
   align-items: center;
   justify-content: space-between;
-  gap: 1.5rem 3rem;
-  padding-top: 2.25rem;
-  padding-bottom: 2.75rem;
+  gap: 16px 28px;
+  font-size: 0.88rem;
+  color: var(--faint);
 }
 
-.about {
+.foot-brand {
   display: flex;
   align-items: center;
-  gap: 1rem;
-  max-width: 34rem;
-}
-
-.about img {
-  flex: none;
-}
-
-.about p {
-  margin: 0;
-  color: var(--text-muted);
-  font-size: 0.95rem;
-}
-
-.about a {
+  gap: 8px;
+  font-size: 1rem;
+  font-weight: 680;
+  letter-spacing: -0.02em;
   color: var(--text);
+}
+
+.foot-brand :deep(.logo-mark) {
+  width: 20px;
+  height: 20px;
+}
+
+.license {
+  margin-right: auto;
+}
+
+.license a,
+.links a {
+  transition: color 0.2s;
+}
+
+.license a:hover,
+.links a:hover {
+  color: var(--text);
+}
+
+.license a {
+  text-decoration: underline;
   text-underline-offset: 3px;
 }
 
 .links {
   display: flex;
-  gap: 1.5rem;
+  flex-wrap: wrap;
+  gap: 8px 20px;
 }
 
-.links a {
-  font-weight: 560;
-  text-decoration: none;
-  color: var(--text-muted);
-}
-
-.links a:hover {
-  color: var(--text);
+@media (max-width: 900px) {
+  .site-footer {
+    margin-top: 140px;
+  }
 }
 </style>

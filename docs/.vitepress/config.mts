@@ -11,7 +11,9 @@ export default defineConfigWithTheme<ThemeConfig>({
   titleTemplate: ':title – KeyCream',
   description,
   cleanUrls: true,
-  appearance: { initialValue: 'dark', storageKey: 'keycream-theme' },
+  // Clears the floating nav. Matches scroll-padding-top in base.css and the story anchor.
+  scrollOffset: 96,
+  appearance: 'force-dark',
   sitemap: { hostname: site },
   srcExclude: ['scripts/**', 'README.md'],
 
@@ -19,7 +21,7 @@ export default defineConfigWithTheme<ThemeConfig>({
     ['link', { rel: 'icon', href: '/keycream/favicon.ico', sizes: '32x32' }],
     ['link', { rel: 'icon', href: '/keycream/favicon.svg', type: 'image/svg+xml' }],
     ['link', { rel: 'apple-touch-icon', href: '/keycream/apple-touch-icon.png' }],
-    ['meta', { name: 'theme-color', content: '#2A1F1A' }],
+    ['meta', { name: 'theme-color', content: '#17110D' }],
     ['meta', { property: 'og:type', content: 'website' }],
     ['meta', { property: 'og:site_name', content: 'KeyCream' }],
     ['meta', { property: 'og:image', content: `${site}app-icon.png` }],
@@ -39,8 +41,9 @@ export default defineConfigWithTheme<ThemeConfig>({
   transformHtml(html) {
     return html
       .replace(/<meta name="generator"[^>]*>\s*/g, '')
-      // The inline theme script has its storage key hard-coded, so it must match the storageKey above.
-      .replaceAll('vitepress-theme-appearance', 'keycream-theme')
+      // The site is dark only and uses no icon font, so these are dead weight.
+      .replace(/<link[^>]*vp-icons\.css[^>]*>\s*/g, '')
+      .replace(/<script id="check-(?:dark-mode|mac-os)">[\s\S]*?<\/script>\s*/g, '')
   },
 
   markdown: {
@@ -57,9 +60,10 @@ export default defineConfigWithTheme<ThemeConfig>({
   themeConfig: {
     repo: 'halitsever/keycream',
     nav: [
-      { text: 'Docs', link: '/guide/installation' },
+      { text: 'How it works', link: '/#how' },
       { text: 'Sound packs', link: '/#packs' },
-      { text: 'GitHub', link: 'https://github.com/halitsever/keycream' },
+      { text: 'Install', link: '/#install' },
+      { text: 'Docs', link: '/guide/installation' },
     ],
     sidebar: [
       {

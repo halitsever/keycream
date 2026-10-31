@@ -1,51 +1,57 @@
 <script setup lang="ts">
 import { computed, onBeforeUnmount, onMounted, reactive, ref } from 'vue'
 import { withBase } from 'vitepress'
+import { fileForScanCode, scanCodes } from '../data/keymap'
+
+type Kind = 'alpha' | 'mod' | 'fn' | 'accent'
 
 interface Key {
   code: string
   label: string
   /** Width in keyboard units, where a letter key is 1. */
-  width?: number
+  width: number
+  kind: Kind
   /** Shown instead of the label when the keyboard is too narrow for words. */
   symbol?: string
 }
 
+const props = withDefaults(defineProps<{ tilt?: number }>(), { tilt: 0 })
+
 const symbols: Record<string, string> = {
-  delete: '⌫', tab: '⇥', 'caps lock': '⇪', return: '↩', shift: '⇧', control: '⌃', option: '⌥', command: '⌘',
+  delete: '⌫', tab: '⇥', 'caps lock': '⇪', return: '↩', shift: '⇧', control: '⌃', option: '⌥', command: '⌘', esc: '⎋',
 }
-const k = (code: string, label: string, width = 1): Key => ({ code, label, width, symbol: symbols[label] })
+const k = (code: string, label: string, width = 1, kind?: Kind): Key => ({
+  code, label, width, symbol: symbols[label], kind: kind ?? (label.length > 1 ? 'mod' : 'alpha'),
+})
 const letters = (codes: string) => [...codes].map((c) => k(`Key${c}`, c))
+const functionKeys = Array.from({ length: 12 }, (_, i) => k(`F${i + 1}`, `F${i + 1}`, 1.125, 'fn'))
 
 const rows: Key[][] = [
+  [k('Escape', 'esc', 1.5, 'accent'), ...functionKeys],
   [k('Backquote', '`'), ...[...'1234567890'].map((d) => k(`Digit${d}`, d)), k('Minus', '-'), k('Equal', '='), k('Backspace', 'delete', 2)],
   [k('Tab', 'tab', 1.5), ...letters('QWERTYUIOP'), k('BracketLeft', '['), k('BracketRight', ']'), k('Backslash', '\\', 1.5)],
-  [k('CapsLock', 'caps lock', 1.75), ...letters('ASDFGHJKL'), k('Semicolon', ';'), k('Quote', "'"), k('Enter', 'return', 2.25)],
+  [k('CapsLock', 'caps lock', 1.75), ...letters('ASDFGHJKL'), k('Semicolon', ';'), k('Quote', "'"), k('Enter', 'return', 2.25, 'accent')],
   [k('ShiftLeft', 'shift', 2.25), ...letters('ZXCVBNM'), k('Comma', ','), k('Period', '.'), k('Slash', '/'), k('ShiftRight', 'shift', 2.75)],
-  [k('ControlLeft', 'control', 1.25), k('AltLeft', 'option', 1.25), k('MetaLeft', 'command', 1.5), k('Space', '', 7), k('MetaRight', 'command', 1.5), k('AltRight', 'option', 1.25), k('ControlRight', 'control', 1.25)],
+  [
+    k('ControlLeft', 'control', 1.25), k('AltLeft', 'option', 1.25), k('MetaLeft', 'command', 1.25), k('Space', '', 6.25, 'alpha'),
+    k('MetaRight', 'command', 1.25), k('AltRight', 'option', 1.25), k('Fn', 'fn', 1.25, 'mod'), k('ControlRight', 'control', 1.25),
+  ],
 ]
 
-/** Browser key codes to the PC scan codes that Mechvibes packs are keyed by. */
-const scanCodes: Record<string, string> = {
-  Escape: '1', Backquote: '41', Minus: '12', Equal: '13', Backspace: '14', Tab: '15',
-  BracketLeft: '26', BracketRight: '27', Backslash: '43', CapsLock: '58', Semicolon: '39', Quote: '40', Enter: '28',
-  ShiftLeft: '42', Comma: '51', Period: '52', Slash: '53', ShiftRight: '54',
-  ControlLeft: '29', AltLeft: '56', MetaLeft: '3675', Space: '57', MetaRight: '3676', AltRight: '3640', ControlRight: '3613',
-  ArrowUp: '57416', ArrowLeft: '57419', ArrowRight: '57421', ArrowDown: '57424',
-}
-;[...'1234567890'].forEach((d, i) => (scanCodes[`Digit${d}`] = String(i + 2)))
-const letterRows: [string, number][] = [['QWERTYUIOP', 16], ['ASDFGHJKL', 30], ['ZXCVBNM', 44]]
-for (const [row, first] of letterRows) [...row].forEach((c, i) => (scanCodes[`Key${c}`] = String(first + i)))
-
 const pressed = reactive(new Set<string>())
+/** A counter per key, so each press mounts a fresh ripple and restarts its animation. */
+const pulses = reactive(new Map<string, number>())
 const typed = ref('')
 const muted = ref(false)
 const focused = ref(false)
-const typedTail = computed(() => typed.value.slice(-42))
+const typedTail = computed(() => typed.value.slice(-34))
+
+const tiltStyle = computed(() => ({
+  transform: `rotateX(${(props.tilt * 34).toFixed(2)}deg) scale(${(1 - props.tilt * 0.08).toFixed(4)})`,
+}))
 
 let context: AudioContext | null = null
 let master: GainNode | null = null
-let fileForScanCode: Record<string, string> | null = null
 const rawFiles = new Map<string, ArrayBuffer>()
 const sounds = new Map<string, { buffer: AudioBuffer; gain: number }>()
 let fetching: Promise<void> | null = null
@@ -53,9 +59,7 @@ let decoding: Promise<void> | null = null
 
 function fetchSounds() {
   fetching ??= (async () => {
-    const response = await fetch(withBase('/keys/map.json'))
-    fileForScanCode = await response.json()
-    const files = [...new Set(Object.values(fileForScanCode!))]
+    const files = [...new Set(Object.values(fileForScanCode as Record<string, string>))]
     await Promise.all(
       files.map(async (file) => rawFiles.set(file, await (await fetch(withBase(`/keys/${file}`))).arrayBuffer())),
     )
@@ -111,7 +115,7 @@ function play(code: string) {
   void startAudio().then(() => {
     // The very first press waits for decoding; play it only if the wait was short enough to still feel like that press.
     if (performance.now() - requestedAt > 300) return
-    const file = fileForScanCode?.[scanCode]
+    const file = (fileForScanCode as Record<string, string>)[scanCode]
     const sound = file ? sounds.get(file) : undefined
     if (!sound || !context || !master) return
     const source = context.createBufferSource()
@@ -121,6 +125,11 @@ function play(code: string) {
     source.connect(gain).connect(master)
     source.start()
   }, () => {})
+}
+
+function down(code: string) {
+  pressed.add(code)
+  pulses.set(code, (pulses.get(code) ?? 0) + 1)
 }
 
 function type(event: KeyboardEvent) {
@@ -137,14 +146,14 @@ function playIntro() {
   if (matchMedia('(prefers-reduced-motion: reduce)').matches) return
   showingIntro = true
   ;[...'KEYCREAM'].forEach((letter, index) => {
-    const at = 700 + index * 120
+    const at = 900 + index * 130
     introTimers.push(
       window.setTimeout(() => {
         if (!showingIntro) return
-        pressed.add(`Key${letter}`)
+        down(`Key${letter}`)
         typed.value += letter.toLowerCase()
       }, at),
-      window.setTimeout(() => pressed.delete(`Key${letter}`), at + 90),
+      window.setTimeout(() => pressed.delete(`Key${letter}`), at + 95),
     )
   })
 }
@@ -158,8 +167,11 @@ function endIntro() {
 
 function onKeyDown(event: KeyboardEvent) {
   endIntro()
-  pressed.add(event.code)
-  if (event.repeat) return
+  if (event.repeat) {
+    pressed.add(event.code)
+    return
+  }
+  down(event.code)
   play(event.code)
   type(event)
   // While the keyboard has focus, keys that would scroll or move focus belong to the demo.
@@ -178,9 +190,10 @@ function release() {
 
 function pressByPointer(key: Key) {
   endIntro()
-  pressed.add(key.code)
+  down(key.code)
   play(key.code)
   if (key.code === 'Backspace') typed.value = typed.value.slice(0, -1)
+  else if (key.code === 'Enter') typed.value = ''
   else if (key.code === 'Space') typed.value += ' '
   else if (key.label.length === 1) typed.value += key.label.toLowerCase()
 }
@@ -226,48 +239,58 @@ onBeforeUnmount(() => {
 
 <template>
   <figure class="demo">
-    <div
-      class="case"
-      tabindex="0"
-      role="group"
-      aria-label="Playable keyboard. Type to hear the NovelKeys Cream sound pack."
-      @focus="focused = true"
-      @blur="focused = false"
-    >
-      <div class="typed" aria-hidden="true">
-        <span v-if="typedTail" class="typed-text">{{ typedTail }}</span>
-        <span v-else class="typed-placeholder">Start typing…</span>
-        <span class="caret"></span>
-      </div>
+    <div class="stage">
+      <div class="tilt" :style="tiltStyle">
+        <div class="screen" aria-hidden="true">
+          <span v-if="typedTail" class="typed">{{ typedTail }}</span>
+          <span v-else class="placeholder">Start typing</span>
+          <span class="caret"></span>
+        </div>
 
-      <div v-for="(row, index) in rows" :key="index" class="row">
-        <button
-          v-for="key in row"
-          :key="key.code"
-          type="button"
-          tabindex="-1"
-          class="key"
-          :class="{ down: pressed.has(key.code), mod: key.label.length > 1, space: key.code === 'Space' }"
-          :style="{ gridColumn: `span ${(key.width ?? 1) * 4}` }"
-          :aria-label="key.label || 'space'"
-          @pointerdown.prevent="pressByPointer(key)"
-          @pointerup="releaseByPointer(key)"
-          @pointerleave="releaseByPointer(key)"
-        >
-          <span class="cap">
-            <span :class="{ word: key.symbol }">{{ key.label }}</span>
-            <span v-if="key.symbol" class="symbol" aria-hidden="true">{{ key.symbol }}</span>
-          </span>
-          <svg v-if="key.code === 'Space'" class="drips" viewBox="0 0 70 14" preserveAspectRatio="none" aria-hidden="true">
-            <path d="M12 0h5v9.5a2.5 2.5 0 0 1-5 0zM27 0h4v5.5a2 2 0 0 1-4 0zM40 0h5v12a2.5 2.5 0 0 1-5 0zM53 0h3v3.5a1.5 1.5 0 0 1-3 0z" />
-          </svg>
-        </button>
+        <div class="board">
+          <div class="glow" aria-hidden="true"></div>
+          <div
+            class="case"
+            tabindex="0"
+            role="group"
+            aria-label="Playable keyboard. Type to hear the NovelKeys Cream sound pack."
+            @focus="focused = true"
+            @blur="focused = false"
+          >
+            <div class="plate">
+              <div v-for="(row, index) in rows" :key="index" class="row" :class="{ 'f-row': index === 0 }">
+                <button
+                  v-for="key in row"
+                  :key="key.code"
+                  type="button"
+                  tabindex="-1"
+                  class="key"
+                  :class="[key.kind, { down: pressed.has(key.code), space: key.code === 'Space' }]"
+                  :style="{ gridColumn: `span ${key.width * 8}` }"
+                  :aria-label="key.label || 'space'"
+                  @pointerdown.prevent="pressByPointer(key)"
+                  @pointerup="releaseByPointer(key)"
+                  @pointerleave="releaseByPointer(key)"
+                >
+                  <span class="top">
+                    <span :class="{ word: key.symbol }">{{ key.label }}</span>
+                    <span v-if="key.symbol" class="symbol" aria-hidden="true">{{ key.symbol }}</span>
+                  </span>
+                  <span v-if="pulses.get(key.code)" :key="pulses.get(key.code)" class="wave" aria-hidden="true"></span>
+                  <svg v-if="key.code === 'Space'" class="drips" viewBox="0 0 70 14" preserveAspectRatio="none" aria-hidden="true">
+                    <path d="M12 0h5v9.5a2.5 2.5 0 0 1-5 0zM27 0h4v5.5a2 2 0 0 1-4 0zM40 0h5v12a2.5 2.5 0 0 1-5 0zM53 0h3v3.5a1.5 1.5 0 0 1-3 0z" />
+                  </svg>
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
 
     <figcaption class="caption">
       <span class="hint-desktop">This keyboard is live. Type on yours to hear NovelKeys Cream, the pack KeyCream starts with.</span>
-      <span class="hint-touch">This keyboard is live. Tap the keys to hear NovelKeys Cream, the pack KeyCream starts with.</span>
+      <span class="hint-touch">This keyboard is live. Tap a key to hear NovelKeys Cream, the pack KeyCream starts with.</span>
       <button class="mute" type="button" :aria-pressed="muted" @click="toggleMute">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
           <path d="M4 9.5h3.5L12 5.5v13l-4.5-4H4z" />
@@ -282,54 +305,46 @@ onBeforeUnmount(() => {
 
 <style scoped>
 .demo {
+  --pad: max(10px, 2cqi);
+  --gap: max(3px, 0.5cqi);
+  --unit: calc((100cqi - 2 * var(--pad)) / 15);
   margin: 0;
   container-type: inline-size;
 }
 
-.case {
-  --unit: calc((100cqi - 2 * var(--pad)) / 15);
-  --pad: max(10px, 2.2cqi);
-  --gap: max(3px, 0.55cqi);
-  position: relative;
-  padding: var(--pad);
-  border-radius: max(14px, 2.4cqi);
-  background: var(--roast);
-  box-shadow:
-    inset 0 2px 0 rgba(255, 255, 255, 0.06),
-    inset 0 -6px 14px rgba(0, 0, 0, 0.35),
-    0 24px 50px -24px rgba(0, 0, 0, 0.55);
-  touch-action: manipulation;
-  user-select: none;
-  -webkit-user-select: none;
+.stage {
+  perspective: 1700px;
 }
 
-.case:focus-visible {
-  outline-offset: 6px;
+.tilt {
+  transform-origin: 50% 0;
+  will-change: transform;
 }
 
-.typed {
+.screen {
   display: flex;
   align-items: center;
-  height: calc(var(--unit) * 0.9);
-  margin-bottom: calc(var(--gap) * 3);
-  padding: 0 calc(var(--unit) * 0.3);
-  border-radius: calc(var(--unit) * 0.16);
-  background: rgba(0, 0, 0, 0.25);
-  color: var(--cream);
-  font-size: max(13px, calc(var(--unit) * 0.34));
-  font-weight: 500;
-  white-space: pre;
+  justify-content: center;
+  height: calc(var(--unit) * 1.15);
+  margin-bottom: calc(var(--unit) * 0.5);
   overflow: hidden;
+  font-size: max(22px, calc(var(--unit) * 0.68));
+  font-weight: 640;
+  font-variation-settings: 'opsz' 48;
+  letter-spacing: -0.03em;
+  white-space: pre;
 }
 
-.typed-placeholder {
-  color: rgba(244, 235, 217, 0.45);
+.placeholder {
+  color: var(--faint);
 }
 
 .caret {
-  width: 2px;
-  height: 1.1em;
-  margin-left: 2px;
+  flex: none;
+  width: 0.07em;
+  height: 0.95em;
+  margin-left: 0.06em;
+  border-radius: 2px;
   background: var(--caramel-light);
   animation: blink 1.1s steps(1) infinite;
 }
@@ -340,77 +355,195 @@ onBeforeUnmount(() => {
   }
 }
 
+.board {
+  position: relative;
+}
+
+/* A warm light under the case, as if the desk lamp hit the plate. */
+.glow {
+  position: absolute;
+  inset: -14% -8% -24%;
+  z-index: -1;
+  pointer-events: none;
+  background: radial-gradient(closest-side, rgba(224, 164, 107, 0.34), rgba(200, 135, 74, 0.1) 60%, transparent);
+  filter: blur(24px);
+}
+
+.case {
+  position: relative;
+  padding: var(--pad);
+  border-radius: calc(var(--unit) * 0.42);
+  background: linear-gradient(180deg, #3d2f27 0%, #2a1f1a 55%, #221914 100%);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 236, 210, 0.16),
+    inset 0 -3px 6px rgba(0, 0, 0, 0.45),
+    0 0 0 1px rgba(0, 0, 0, 0.55),
+    0 calc(var(--unit) * 0.5) calc(var(--unit) * 1.1) rgba(0, 0, 0, 0.55),
+    0 calc(var(--unit) * 1.3) calc(var(--unit) * 2.6) rgba(0, 0, 0, 0.45);
+  touch-action: manipulation;
+  user-select: none;
+  -webkit-user-select: none;
+}
+
+.case:focus-visible {
+  outline-offset: 6px;
+  border-radius: calc(var(--unit) * 0.42);
+}
+
+.plate {
+  padding: calc(var(--gap) * 1.2) 0;
+  border-radius: calc(var(--unit) * 0.22);
+  background: #110b08;
+  box-shadow: inset 0 2px 10px rgba(0, 0, 0, 0.8);
+}
+
 .row {
   display: grid;
-  grid-template-columns: repeat(60, 1fr);
-  column-gap: var(--gap);
+  grid-template-columns: repeat(120, 1fr);
 }
 
 .row + .row {
   margin-top: var(--gap);
 }
 
+.f-row {
+  margin-bottom: calc(var(--gap) * 2.2);
+}
+
 .key {
+  --skirt: linear-gradient(180deg, #e8dabd, #cbb48c);
+  --face: linear-gradient(180deg, #fdf8ec, #f1e5cc);
+  --edge: #7d6345;
+  --ink: #2a1f1a;
   position: relative;
   height: calc(var(--unit) - var(--gap));
+  margin: 0 calc(var(--gap) / 2);
   padding: 0;
   border: 0;
-  border-radius: calc(var(--unit) * 0.14);
-  background: var(--cream);
-  color: var(--espresso);
+  border-radius: calc(var(--unit) * 0.15);
+  background: var(--skirt);
+  color: var(--ink);
   box-shadow:
-    inset 0 calc(var(--unit) * -0.09) 0 var(--cream-shade),
-    0 1px 0 rgba(0, 0, 0, 0.35);
+    0 calc(var(--unit) * 0.055) 0 var(--edge),
+    0 calc(var(--unit) * 0.1) calc(var(--unit) * 0.14) rgba(0, 0, 0, 0.55);
   cursor: pointer;
-  transition: transform 45ms ease-out, box-shadow 45ms ease-out, background-color 45ms;
+  transition: transform 45ms ease-out, box-shadow 45ms ease-out;
+}
+
+.mod {
+  --skirt: linear-gradient(180deg, #d3bb93, #b2966a);
+  --face: linear-gradient(180deg, #ead9bb, #dcc6a2);
+  --edge: #6b5136;
+  --ink: #4a382d;
+}
+
+.accent {
+  --skirt: linear-gradient(180deg, #c98b53, #a46833);
+  --face: linear-gradient(180deg, #ebb179, #d4945a);
+  --edge: #6f431d;
+  --ink: #2a1f1a;
+}
+
+.fn {
+  height: calc(var(--unit) * 0.7);
+}
+
+.f-row .accent {
+  height: calc(var(--unit) * 0.7);
 }
 
 .key.down {
   transform: translateY(calc(var(--unit) * 0.05));
-  background: #ece0c7;
   box-shadow:
-    inset 0 calc(var(--unit) * -0.035) 0 var(--cream-shade),
-    0 0 0 rgba(0, 0, 0, 0.35);
+    0 calc(var(--unit) * 0.012) 0 var(--edge),
+    0 calc(var(--unit) * 0.03) calc(var(--unit) * 0.05) rgba(0, 0, 0, 0.5);
 }
 
-.cap {
+.top {
   position: absolute;
-  inset: 0;
+  inset: calc(var(--unit) * 0.045) calc(var(--unit) * 0.085) calc(var(--unit) * 0.15);
   display: grid;
   place-items: center;
-  padding-bottom: calc(var(--unit) * 0.08);
-  font-size: max(9px, calc(var(--unit) * 0.3));
+  border-radius: calc(var(--unit) * 0.11);
+  background: var(--face);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.75),
+    0 1px 2px rgba(80, 50, 20, 0.22);
+  font-size: max(9px, calc(var(--unit) * 0.29));
   font-weight: 620;
   line-height: 1;
 }
 
-.mod .cap {
+.down .top {
+  filter: brightness(0.96);
+}
+
+.mod .top {
   place-items: end start;
-  padding: 0 0 calc(var(--unit) * 0.16) calc(var(--unit) * 0.16);
-  font-size: max(7px, calc(var(--unit) * 0.19));
+  padding: 0 0 calc(var(--unit) * 0.12) calc(var(--unit) * 0.1);
+  font-size: max(7px, calc(var(--unit) * 0.16));
   font-weight: 560;
+}
+
+.fn .top,
+.f-row .accent .top {
+  inset: calc(var(--unit) * 0.035) calc(var(--unit) * 0.075) calc(var(--unit) * 0.11);
+  font-size: max(7px, calc(var(--unit) * 0.17));
+  font-weight: 580;
+}
+
+.accent .top {
+  place-items: end start;
+  padding: 0 0 calc(var(--unit) * 0.12) calc(var(--unit) * 0.12);
+  font-size: max(7px, calc(var(--unit) * 0.18));
+}
+
+.f-row .accent .top {
+  place-items: center;
+  padding: 0;
+}
+
+/* A ring that leaves the key, standing in for the sound. */
+.wave {
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  pointer-events: none;
+  animation: wave 0.6s cubic-bezier(0.2, 0.7, 0.3, 1) forwards;
+}
+
+@keyframes wave {
+  from {
+    box-shadow: 0 0 0 0 rgba(255, 220, 174, 0.75);
+  }
+
+  to {
+    box-shadow: 0 0 0 calc(var(--unit) * 0.42) rgba(255, 220, 174, 0);
+  }
 }
 
 .drips {
   position: absolute;
-  top: calc(100% - 2px);
-  left: 0;
-  width: 100%;
-  height: calc(var(--unit) * 0.75);
-  fill: var(--cream);
+  top: calc(100% - var(--unit) * 0.16 - 2px);
+  left: calc(var(--unit) * 0.085);
+  width: calc(100% - var(--unit) * 0.17);
+  height: calc(var(--unit) * 0.6);
+  fill: #f6ecd8;
   overflow: visible;
   pointer-events: none;
+  filter: drop-shadow(0 1px 1px rgba(0, 0, 0, 0.35));
 }
 
 .caption {
   display: flex;
   flex-wrap: wrap;
   align-items: center;
-  justify-content: space-between;
-  gap: 0.75rem 1.5rem;
-  margin-top: 2.2rem;
-  color: var(--text-muted);
+  justify-content: center;
+  gap: 0.75rem 1.25rem;
+  margin-top: 2.6rem;
   font-size: 0.95rem;
+  color: var(--dim);
+  text-align: center;
 }
 
 .hint-touch {
@@ -431,14 +564,19 @@ onBeforeUnmount(() => {
   display: inline-flex;
   align-items: center;
   gap: 0.45em;
-  padding: 0.45em 0.8em;
+  height: 34px;
+  padding: 0 14px;
   border: 0;
-  border-radius: 10px;
-  background: var(--surface);
-  color: var(--text);
-  font-size: 0.9rem;
+  border-radius: 999px;
+  background: rgba(244, 235, 217, 0.06);
+  box-shadow: inset 0 0 0 1px var(--line);
+  font-size: 0.88rem;
   font-weight: 560;
   cursor: pointer;
+}
+
+.mute:hover {
+  background: rgba(244, 235, 217, 0.1);
 }
 
 .mute svg {
@@ -459,10 +597,15 @@ onBeforeUnmount(() => {
     display: inline;
   }
 
-  .mod .cap {
+  .mod .top,
+  .accent .top {
     place-items: center;
-    padding: 0 0 calc(var(--unit) * 0.08);
-    font-size: max(10px, calc(var(--unit) * 0.36));
+    padding: 0;
+    font-size: max(10px, calc(var(--unit) * 0.34));
+  }
+
+  .fn .top {
+    font-size: max(6px, calc(var(--unit) * 0.2));
   }
 }
 </style>

@@ -34,5 +34,5 @@ Nothing else is written to disk.
 - No analytics, no tracking, no cookies.
 - Fonts and sounds are served from this site. Nothing is loaded from font or ad services.
 - The download button asks GitHub's API for the latest release, so your browser sends one request to `api.github.com`.
-- Your browser remembers your theme and whether you muted the keyboard demo, in its local storage on your device.
+- Your browser remembers whether you muted the keyboard demo, in its local storage on your device.
 - The site is hosted on GitHub Pages, which may keep server logs. See the [GitHub Privacy Statement](https://docs.github.com/site-policy/privacy-policies/github-general-privacy-statement).

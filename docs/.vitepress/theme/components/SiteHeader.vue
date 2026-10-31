@@ -1,156 +1,170 @@
 <script setup lang="ts">
-import { useData, withBase } from 'vitepress'
+import { onBeforeUnmount, onMounted, ref, watch } from 'vue'
+import { useData, useRoute, withBase } from 'vitepress'
 import type { ThemeConfig } from '../types'
 import DownloadButton from './DownloadButton.vue'
+import LogoMark from './LogoMark.vue'
 
-const { theme, isDark } = useData<ThemeConfig>()
+const { theme, frontmatter } = useData<ThemeConfig>()
+const route = useRoute()
+const section = ref('')
+let frame = 0
 
-const href = (link: string) => (link.startsWith('/') ? withBase(link) : link)
-const isExternal = (link: string) => /^https?:/.test(link)
+const href = (link: string) => withBase(link)
+const anchorOf = (link: string) => link.split('#')[1] ?? ''
+
+function isOn(link: string) {
+  const anchor = anchorOf(link)
+  if (anchor) return frontmatter.value.layout === 'home' && section.value === anchor
+  return route.path.includes('/guide/')
+}
+
+/** The section crossing the upper third of the screen counts as the one being read. */
+function update() {
+  frame = 0
+  if (frontmatter.value.layout !== 'home') return
+  const line = window.innerHeight * 0.35
+  section.value = ''
+  for (const item of theme.value.nav) {
+    const anchor = anchorOf(item.link)
+    const rect = anchor ? document.getElementById(anchor)?.getBoundingClientRect() : undefined
+    if (rect && rect.top <= line && rect.bottom > line) section.value = anchor
+  }
+}
+
+function onScroll() {
+  frame ||= requestAnimationFrame(update)
+}
+
+onMounted(() => {
+  window.addEventListener('scroll', onScroll, { passive: true })
+  update()
+})
+
+onBeforeUnmount(() => {
+  window.removeEventListener('scroll', onScroll)
+  cancelAnimationFrame(frame)
+})
+
+watch(() => route.path, () => requestAnimationFrame(update))
 </script>
 
 <template>
   <header class="site-header">
-    <div class="container bar">
+    <nav class="nav" aria-label="Main">
       <a class="brand" :href="withBase('/')" aria-label="KeyCream home">
-        <img class="logo logo-light" :src="withBase('/keycream-logo.svg')" alt="" width="132" height="32" />
-        <img class="logo logo-dark" :src="withBase('/keycream-logo-dark.svg')" alt="" width="132" height="32" />
+        <LogoMark />
+        <span>KeyCream</span>
       </a>
-
-      <nav class="nav" aria-label="Main">
-        <a
-          v-for="item in theme.nav"
-          :key="item.link"
-          class="nav-link"
-          :class="{ secondary: item.link.includes('#') }"
-          :href="href(item.link)"
-          :target="isExternal(item.link) ? '_blank' : undefined"
-          :rel="isExternal(item.link) ? 'noopener' : undefined"
-        >{{ item.text }}</a>
-      </nav>
-
-      <div class="actions">
-        <button
-          class="theme-toggle"
-          type="button"
-          :aria-label="isDark ? 'Switch to light theme' : 'Switch to dark theme'"
-          :aria-pressed="isDark"
-          @click="isDark = !isDark"
-        >
-          <svg v-if="isDark" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true">
-            <circle cx="12" cy="12" r="4.2" />
-            <path d="M12 2.5v2.2M12 19.3v2.2M4.6 4.6l1.6 1.6M17.8 17.8l1.6 1.6M2.5 12h2.2M19.3 12h2.2M4.6 19.4l1.6-1.6M17.8 6.2l1.6-1.6" />
-          </svg>
-          <svg v-else viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round" aria-hidden="true">
-            <path d="M20 14.5A8 8 0 0 1 9.5 4a8 8 0 1 0 10.5 10.5z" />
-          </svg>
-        </button>
-        <DownloadButton compact />
-      </div>
-    </div>
+      <a
+        v-for="item in theme.nav"
+        :key="item.link"
+        class="l"
+        :class="{ on: isOn(item.link), docs: !anchorOf(item.link) }"
+        :href="href(item.link)"
+      >{{ item.text }}</a>
+      <a class="gh" :href="`https://github.com/${theme.repo}`" aria-label="KeyCream on GitHub">
+        <svg viewBox="0 0 24 24" aria-hidden="true">
+          <path
+            fill="currentColor"
+            d="M12 2.2a10 10 0 0 0-3.16 19.49c.5.09.68-.22.68-.48v-1.7c-2.78.6-3.37-1.34-3.37-1.34-.45-1.16-1.11-1.47-1.11-1.47-.91-.62.07-.6.07-.6 1 .07 1.53 1.03 1.53 1.03.9 1.52 2.34 1.08 2.91.83.09-.65.35-1.09.63-1.34-2.22-.25-4.55-1.11-4.55-4.94 0-1.09.39-1.98 1.03-2.68-.1-.25-.45-1.27.1-2.64 0 0 .84-.27 2.75 1.02a9.5 9.5 0 0 1 5 0c1.91-1.29 2.75-1.02 2.75-1.02.55 1.37.2 2.39.1 2.64.64.7 1.03 1.59 1.03 2.68 0 3.84-2.34 4.68-4.57 4.93.36.31.68.92.68 1.85v2.74c0 .27.18.58.69.48A10 10 0 0 0 12 2.2z"
+          />
+        </svg>
+      </a>
+      <DownloadButton compact />
+    </nav>
   </header>
 </template>
 
 <style scoped>
 .site-header {
-  position: sticky;
-  top: 0;
-  z-index: 20;
-  background: color-mix(in srgb, var(--bg) 88%, transparent);
-  backdrop-filter: blur(10px);
-  -webkit-backdrop-filter: blur(10px);
-  border-bottom: 1px solid var(--rule);
-}
-
-.bar {
+  position: fixed;
+  top: 18px;
+  left: 0;
+  right: 0;
+  z-index: 80;
   display: flex;
-  align-items: center;
-  gap: 2rem;
-  height: var(--header-height);
-}
-
-.brand {
-  flex: none;
-}
-
-.logo {
-  height: 30px;
-  width: auto;
-}
-
-.logo-dark,
-.dark .logo-light {
-  display: none;
-}
-
-.dark .logo-dark {
-  display: block;
+  justify-content: center;
+  padding: 0 12px;
+  pointer-events: none;
 }
 
 .nav {
   display: flex;
-  gap: 1.5rem;
-  margin-right: auto;
+  align-items: center;
+  gap: 2px;
+  max-width: 100%;
+  padding: 6px 6px 6px 14px;
+  border-radius: 999px;
+  font-size: 0.9rem;
+  background: rgba(31, 23, 18, 0.66);
+  backdrop-filter: blur(18px) saturate(1.4);
+  -webkit-backdrop-filter: blur(18px) saturate(1.4);
+  box-shadow:
+    0 0 0 1px var(--line),
+    0 10px 40px rgba(0, 0, 0, 0.4);
+  pointer-events: auto;
 }
 
-.nav-link {
-  font-weight: 560;
-  text-decoration: none;
-  color: var(--text-muted);
-}
-
-.nav-link:hover {
-  color: var(--text);
-}
-
-.actions {
+.brand {
   display: flex;
   align-items: center;
-  gap: 0.6rem;
+  gap: 8px;
+  margin-right: 10px;
+  font-size: 1.05rem;
+  font-weight: 680;
+  letter-spacing: -0.02em;
+  white-space: nowrap;
 }
 
-.theme-toggle {
+.brand :deep(.logo-mark) {
+  width: 22px;
+  height: 22px;
+}
+
+.l {
+  padding: 8px 13px;
+  border-radius: 999px;
+  white-space: nowrap;
+  color: var(--dim);
+  transition: color 0.2s, background-color 0.2s;
+}
+
+.l:hover,
+.l.on {
+  color: var(--text);
+  background: rgba(244, 235, 217, 0.08);
+}
+
+.gh {
   display: grid;
   place-items: center;
-  width: 2.4rem;
-  height: 2.4rem;
-  border: 0;
-  border-radius: 10px;
-  background: transparent;
-  color: var(--text-muted);
-  cursor: pointer;
+  width: 36px;
+  height: 36px;
+  margin-left: 4px;
+  border-radius: 999px;
+  color: var(--dim);
+  transition: color 0.2s, background-color 0.2s;
 }
 
-.theme-toggle:hover {
+.gh:hover {
   color: var(--text);
-  background: var(--surface);
+  background: rgba(244, 235, 217, 0.08);
 }
 
-.theme-toggle svg {
-  width: 1.2rem;
-  height: 1.2rem;
+.gh svg {
+  width: 19px;
+  height: 19px;
 }
 
-@media (max-width: 720px) {
-  .bar {
-    gap: 1rem;
-  }
-
-  .nav {
-    gap: 1rem;
-  }
-
-  .nav-link.secondary {
+@media (max-width: 900px) {
+  .l:not(.docs) {
     display: none;
   }
 }
 
-@media (max-width: 480px) {
-  .logo {
-    height: 24px;
-  }
-
-  .nav-link:not(:first-child) {
+@media (max-width: 380px) {
+  .brand span {
     display: none;
   }
 }
