@@ -23,6 +23,7 @@ KeyCream turns key presses into sounds. To do that it needs to know when a key g
 |---|---|
 | Sounds on or off | `enabled = 1` |
 | Volume | `volume = 1` |
+| Volume limit | `volumeLimit = 0.5` |
 | Selected sound pack | `soundPack = NovelKeys-cream` |
 | Language you chose in the menu | `AppleLanguages = (en)` |
 | That KeyCream already added itself to login items | `launchAtLoginConfigured = 1` |
