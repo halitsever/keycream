@@ -12,6 +12,7 @@ KeyCream has no window. Everything happens from its icon in the menu bar, a smal
 |---|---|---|
 | **Sounds On** | Turns key sounds on or off without quitting the app. | On |
 | **Volume** | Low, Medium or High. | High |
+| **Volume Limit** | Keeps key sounds from getting louder once your Mac's volume passes 25%, 50% or 75%. **Off** lets them follow your Mac's volume all the way up. | 50% |
 | **Sound Pack** | Chooses which keyboard you hear. The new pack plays right away. | NovelKeys Cream |
 | **Open at Login** | Starts KeyCream when you log in to your Mac. | On |
 | **Language** | **System Language** follows your Mac. Choose a language to use that one instead. | System Language |
@@ -32,6 +33,12 @@ Holding a key down plays one sound. The repeated characters macOS types while yo
 The menu volume works on top of your Mac's volume. On **High**, KeyCream plays each sound at the level the pack was leveled to. **Medium** and **Low** play it at 60% and 30% of that.
 
 Every pack is leveled when it loads, so switching packs doesn't make your keyboard suddenly louder or quieter.
+
+## Volume limit
+
+Turning up your Mac to hear a quiet podcast or video turns up KeyCream too. **Volume Limit** stops that. Pick 25%, 50% or 75%, and key sounds never get louder than they are at that Mac volume. Below it nothing changes. Above it, KeyCream turns itself down by as much as your Mac went up, so the rest of your audio keeps getting louder while the keys stay where they were.
+
+KeyCream follows the volume of the output you're using, so it adjusts when you switch to headphones or AirPods. Some outputs, such as HDMI displays and some USB audio interfaces, don't let macOS control their volume, and the limit has no effect on them.
 
 ## Languages
 

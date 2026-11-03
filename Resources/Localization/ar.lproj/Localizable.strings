@@ -10,3 +10,6 @@
 "language" = "اللغة";
 "language_system" = "لغة النظام";
 "sound_pack" = "حزمة الأصوات";
+"volume_limit" = "حد مستوى الصوت";
+"volume_limit_off" = "إيقاف";
+"volume_limit_hint" = "لن تصبح أصوات المفاتيح أعلى مما تكون عليه عند مستوى صوت النظام هذا.";

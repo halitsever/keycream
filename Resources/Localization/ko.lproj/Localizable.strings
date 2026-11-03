@@ -10,3 +10,6 @@
 "language" = "언어";
 "language_system" = "시스템 언어";
 "sound_pack" = "사운드 팩";
+"volume_limit" = "음량 제한";
+"volume_limit_off" = "끔";
+"volume_limit_hint" = "키 소리는 시스템 음량이 이 수준일 때보다 커지지 않습니다.";

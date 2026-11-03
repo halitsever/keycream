@@ -30,6 +30,9 @@ enum Localization {
         }
     }
 
+    /** Lets numbers in the menu follow the menu language rather than the system region. */
+    static var locale: Locale { Locale(identifier: override ?? systemLanguage) }
+
     static func string(_ key: String) -> String {
         bundle.localizedString(forKey: key, value: nil, table: nil)
     }

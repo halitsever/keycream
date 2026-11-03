@@ -10,3 +10,6 @@
 "language" = "语言";
 "language_system" = "系统语言";
 "sound_pack" = "声音包";
+"volume_limit" = "音量上限";
+"volume_limit_off" = "关闭";
+"volume_limit_hint" = "按键声音不会超过系统音量处于此级别时的响度。";

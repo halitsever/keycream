@@ -10,3 +10,6 @@
 "language" = "Sprache";
 "language_system" = "Systemsprache";
 "sound_pack" = "Soundpaket";
+"volume_limit" = "Lautstärkegrenze";
+"volume_limit_off" = "Aus";
+"volume_limit_hint" = "Tastentöne werden nie lauter als bei dieser Systemlautstärke.";

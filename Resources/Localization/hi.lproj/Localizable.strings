@@ -10,3 +10,6 @@
 "language" = "भाषा";
 "language_system" = "सिस्टम भाषा";
 "sound_pack" = "साउंड पैक";
+"volume_limit" = "वॉल्यूम सीमा";
+"volume_limit_off" = "बंद";
+"volume_limit_hint" = "कुंजियों की आवाज़ इस सिस्टम वॉल्यूम पर जितनी होती है, उससे ज़्यादा तेज़ नहीं होगी।";

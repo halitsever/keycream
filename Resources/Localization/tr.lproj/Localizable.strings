@@ -10,3 +10,6 @@
 "language" = "Dil";
 "language_system" = "Sistem dili";
 "sound_pack" = "Ses paketi";
+"volume_limit" = "Ses sınırı";
+"volume_limit_off" = "Kapalı";
+"volume_limit_hint" = "Tuş sesleri, sistem sesi bu seviyedeyken olduğundan daha yüksek çıkmaz.";

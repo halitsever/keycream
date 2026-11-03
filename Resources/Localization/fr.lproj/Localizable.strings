@@ -10,3 +10,6 @@
 "language" = "Langue";
 "language_system" = "Langue du système";
 "sound_pack" = "Pack de sons";
+"volume_limit" = "Limite de volume";
+"volume_limit_off" = "Désactivée";
+"volume_limit_hint" = "Les sons des touches ne dépassent jamais leur niveau à ce volume système.";

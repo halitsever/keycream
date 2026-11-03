@@ -13,6 +13,10 @@ Check these in order:
 3. **Your Mac's volume.** KeyCream plays through your current output, so a muted Mac or a quiet output device mutes it too.
 4. **Output device.** Play a sound from another app. If that is silent too, the problem is the output device, not KeyCream.
 
+## Key sounds don't get louder when I turn up my Mac
+
+That's **Volume Limit**, which starts at 50%. In the KeyCream menu, choose a higher limit or **Off** to let key sounds follow your Mac's volume. [Using KeyCream](/guide/usage#volume-limit) explains how it works.
+
 ## It went quiet after an update
 
 macOS ties the Input Monitoring permission to the exact app you allowed. After an update it may treat KeyCream as a different app, while the switch in System Settings still looks on.

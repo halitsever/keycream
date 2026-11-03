@@ -10,3 +10,6 @@
 "language" = "Language";
 "language_system" = "System Language";
 "sound_pack" = "Sound Pack";
+"volume_limit" = "Volume Limit";
+"volume_limit_off" = "Off";
+"volume_limit_hint" = "Key sounds never get louder than they are at this system volume.";
