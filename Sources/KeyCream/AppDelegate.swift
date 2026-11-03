@@ -8,6 +8,7 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
         static let volume = "volume"
         static let launchAtLoginConfigured = "launchAtLoginConfigured"
         static let soundPack = "soundPack"
+        static let volumeLimit = "volumeLimit"
     }
 
     /** Titles are string keys so they follow a language change made while the app runs. */
@@ -15,8 +16,12 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
         ("volume_low", 0.3), ("volume_medium", 0.6), ("volume_high", 1.0),
     ]
 
+    /** System volume above which key sounds stop getting louder. 1 turns the limit off. */
+    private let volumeLimits: [Float] = [1.0, 0.25, 0.5, 0.75]
+
     private var statusItem: NSStatusItem!
     private var player: SoundPlayer?
+    private let outputVolume = OutputVolume()
     private var packs: [SoundPack] = []
     private var loadedPackID: String?
     private let monitor = KeyboardMonitor()
@@ -32,6 +37,11 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
         set { UserDefaults.standard.set(newValue, forKey: DefaultsKey.volume) }
     }
 
+    private var volumeLimit: Float {
+        get { UserDefaults.standard.object(forKey: DefaultsKey.volumeLimit) as? Float ?? 0.5 }
+        set { UserDefaults.standard.set(newValue, forKey: DefaultsKey.volumeLimit) }
+    }
+
     func applicationDidFinishLaunching(_ notification: Notification) {
         statusItem = NSStatusBar.system.statusItem(withLength: NSStatusItem.squareLength)
         let icon = NSImage(named: "MenuBarIconTemplate") ?? NSImage(systemSymbolName: "keyboard", accessibilityDescription: "KeyCream")
@@ -40,12 +50,12 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
 
         packs = SoundPack.bundled()
         do {
-            let player = try SoundPlayer()
-            player.volume = volume
-            self.player = player
+            player = try SoundPlayer()
         } catch {
             print("Failed to start audio: \(error)")
         }
+        outputVolume.onChange = { [weak self] in self?.applyVolume() }
+        applyVolume()
         let savedID = UserDefaults.standard.string(forKey: DefaultsKey.soundPack) ?? SoundPack.defaultID
         if !loadPack(id: savedID), savedID != SoundPack.defaultID {
             loadPack(id: SoundPack.defaultID)
@@ -104,6 +114,20 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
         volumeItem.submenu = volumeMenu
         menu.addItem(volumeItem)
 
+        let limitItem = NSMenuItem(title: Localization.string("volume_limit"), action: nil, keyEquivalent: "")
+        let limitMenu = NSMenu()
+        let limitHint = Localization.string("volume_limit_hint")
+        for (index, limit) in volumeLimits.enumerated() {
+            let title = limit >= 1 ? Localization.string("volume_limit_off") : limit.formatted(.percent.locale(Localization.locale))
+            let item = NSMenuItem(title: title, action: #selector(selectVolumeLimit(_:)), keyEquivalent: "")
+            item.tag = index
+            item.toolTip = limitHint
+            item.state = abs(limit - volumeLimit) < 0.01 ? .on : .off
+            limitMenu.addItem(item)
+        }
+        limitItem.submenu = limitMenu
+        menu.addItem(limitItem)
+
         let packItem = NSMenuItem(title: Localization.string("sound_pack"), action: nil, keyEquivalent: "")
         let packMenu = NSMenu()
         for pack in packs {
@@ -161,8 +185,18 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
 
     @objc private func selectVolume(_ sender: NSMenuItem) {
         volume = volumeLevels[sender.tag].value
-        player?.volume = volume
+        applyVolume()
         rebuildMenu()
+    }
+
+    @objc private func selectVolumeLimit(_ sender: NSMenuItem) {
+        volumeLimit = volumeLimits[sender.tag]
+        applyVolume()
+        rebuildMenu()
+    }
+
+    private func applyVolume() {
+        player?.volume = volume * outputVolume.gain(limit: volumeLimit)
     }
 
     @discardableResult

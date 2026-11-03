@@ -10,3 +10,6 @@
 "language" = "言語";
 "language_system" = "システムの言語";
 "sound_pack" = "サウンドパック";
+"volume_limit" = "音量の上限";
+"volume_limit_off" = "オフ";
+"volume_limit_hint" = "キーの音は、システム音量がこのレベルのときより大きくなりません。";

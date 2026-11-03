@@ -10,3 +10,6 @@
 "language" = "Idioma";
 "language_system" = "Idioma del sistema";
 "sound_pack" = "Paquete de sonidos";
+"volume_limit" = "Límite de volumen";
+"volume_limit_off" = "Desactivado";
+"volume_limit_hint" = "Los sonidos de las teclas nunca suenan más fuerte que con este volumen del sistema.";
