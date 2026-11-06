@@ -1,4 +1,5 @@
 import AVFoundation
+import AudioToolbox
 
 /** Plays the sound assigned to each key from a Mechvibes pack loaded into memory. */
 final class SoundPlayer {
@@ -11,12 +12,23 @@ final class SoundPlayer {
     private let format: AVAudioFormat
     /** Several nodes so fast typing overlaps instead of cutting the previous click. */
     private var players: [AVAudioPlayerNode] = []
+    /** Each player's sound gain, kept so a volume change also reaches sounds still playing. */
+    private var playerGains: [Float] = []
     private var nextPlayer = 0
     private var sounds: [String: PreparedSound] = [:]
     private var configObserver: NSObjectProtocol?
 
     /** Player volume goes above 1 when a quiet file needs boosting, so the user level is applied per play. */
-    var volume: Float = 1.0
+    var volume: Float = 1.0 {
+        didSet {
+            for (index, player) in players.enumerated() where player.isPlaying {
+                player.volume = playerGains[index] * volume
+            }
+        }
+    }
+
+    /** nil plays through the system default output. */
+    private(set) var outputDevice: AudioObjectID?
 
     init(playerCount: Int = 10) throws {
         format = engine.mainMixerNode.outputFormat(forBus: 0)
@@ -26,11 +38,13 @@ final class SoundPlayer {
             engine.connect(player, to: engine.mainMixerNode, format: format)
             players.append(player)
         }
+        playerGains = Array(repeating: 1, count: playerCount)
         try engine.start()
 
         configObserver = NotificationCenter.default.addObserver(
             forName: .AVAudioEngineConfigurationChange, object: engine, queue: .main
         ) { [weak self] _ in
+            self?.routeOutput()
             self?.restartEngine()
         }
     }
@@ -80,6 +94,7 @@ final class SoundPlayer {
         if !engine.isRunning { restartEngine() }
 
         let player = players[nextPlayer]
+        playerGains[nextPlayer] = sound.gain
         nextPlayer = (nextPlayer + 1) % players.count
         player.stop()
         player.volume = sound.gain * volume
@@ -87,8 +102,36 @@ final class SoundPlayer {
         player.play()
     }
 
+    /** nil plays through the system default. Call it again when the default changes, since the engine keeps the device it was given. */
+    func setOutputDevice(_ device: AudioObjectID?) {
+        outputDevice = device
+        routeOutput()
+    }
+
+    /** Moves the engine only when it plays somewhere else, since moving it cuts off sounds in progress. */
+    private func routeOutput() {
+        guard let unit = engine.outputNode.audioUnit else { return }
+        var target = outputDevice ?? OutputDevices.defaultDeviceID
+        guard target != kAudioObjectUnknown, target != Self.currentDevice(of: unit) else { return }
+        engine.stop()
+        let status = AudioUnitSetProperty(
+            unit, kAudioOutputUnitProperty_CurrentDevice, kAudioUnitScope_Global, 0,
+            &target, UInt32(MemoryLayout<AudioObjectID>.size)
+        )
+        if status != noErr { print("Output device change failed: \(status)") }
+        restartEngine()
+    }
+
+    private static func currentDevice(of unit: AudioUnit) -> AudioObjectID {
+        var device = AudioObjectID(kAudioObjectUnknown)
+        var size = UInt32(MemoryLayout<AudioObjectID>.size)
+        AudioUnitGetProperty(unit, kAudioOutputUnitProperty_CurrentDevice, kAudioUnitScope_Global, 0, &device, &size)
+        return device
+    }
+
     /** The engine stops itself when the output device changes, e.g. headphones plugged in. */
     private func restartEngine() {
+        guard !engine.isRunning else { return }
         do {
             try engine.start()
         } catch {

@@ -13,9 +13,9 @@ const { theme } = useData<ThemeConfig>()
 const repoUrl = `https://github.com/${theme.value.repo}`
 
 const menuPoints = [
-  { title: 'Volume.', text: 'Low, Medium or High, on top of your Mac’s own volume.' },
+  { title: 'Volume.', text: 'A slider and three presets, on top of your Mac’s own volume.' },
   { title: 'Sound Pack.', text: 'Seven switches. A new pack plays the moment you pick it.' },
-  { title: 'Language.', text: 'Twelve languages. It follows your Mac, or you choose one.' },
+  { title: 'Output Device.', text: 'Keep the clicks on your speakers while music plays in your headphones.' },
   { title: 'Sounds On.', text: 'Turns the clicks off without quitting the app.' },
 ]
 
@@ -26,7 +26,7 @@ const features = [
   { title: 'Built for every Mac', text: 'A universal app for Apple Silicon and Intel on macOS 14 or later. No Dock icon, and it opens at login.' },
 ]
 
-const neverDoes = ['Store your key presses', 'Turn them into text', 'Connect to the internet', 'Change or block a key']
+const neverDoes = ['Store your key presses', 'Turn them into text', 'Send your keys anywhere', 'Change or block a key']
 
 const steps = [
   { title: 'Download and unzip', text: 'Get the latest release from GitHub. It runs on macOS 14 or later.' },
@@ -41,7 +41,7 @@ const questions = [
   },
   {
     q: 'Can KeyCream see what I type?',
-    a: 'No. macOS tells it which physical key went down, and that is only used to pick a sound. KeyCream never stores keys, never puts them together into text, and has no networking code at all.',
+    a: 'No. macOS tells it which physical key went down, and that is only used to pick a sound. KeyCream never stores keys, never puts them together into text, and never sends them anywhere. The only thing it asks the internet is whether GitHub has a newer release.',
   },
   {
     q: 'Why does it need Input Monitoring?',
@@ -174,7 +174,7 @@ onBeforeUnmount(() => {
         <article class="card languages">
           <div>
             <h3>In your language</h3>
-            <p>KeyCream follows your Mac&rsquo;s language, or you pick one from its menu.</p>
+            <p>KeyCream follows your Mac&rsquo;s language, or you pick one in its settings.</p>
           </div>
           <ul>
             <li v-for="name in languages" :key="name">{{ name }}</li>

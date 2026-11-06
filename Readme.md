@@ -23,8 +23,10 @@
 - 🎚️ [**Even volume**](https://halitsever.github.io/keycream/#how) - every key is leveled when a pack loads, so no single key is suddenly louder than the rest.
 - 🖐️ [**Natural typing**](https://halitsever.github.io/keycream/#how) - holding a key plays one click, and fast typing overlaps instead of cutting off.
 - 🧭 [**Menu bar only**](https://halitsever.github.io/keycream/#using) - no Dock icon, it opens at login and remembers your settings.
-- 🌍 [**12 languages**](https://halitsever.github.io/keycream/guide/usage#languages) - follows your Mac's language, or pick one from the menu.
-- 🔒 [**Private**](https://halitsever.github.io/keycream/guide/privacy) - reads only which key went down, never what you type, and makes no network connections.
+- 🔇 [**Steps back when needed**](https://halitsever.github.io/keycream/guide/usage#lower-during-calls-and-media) - can drop to 5% while Zoom, Teams, Spotify and similar apps are open, play on an output of your choice, and turn on or off with a shortcut from any app.
+- 🌍 [**12 languages**](https://halitsever.github.io/keycream/guide/usage#languages) - follows your Mac's language, or pick one in Settings.
+- 🔒 [**Private**](https://halitsever.github.io/keycream/guide/privacy) - reads only which key went down, never what you type, and only goes online to check GitHub for updates.
+- 🔄 [**Updates itself**](https://halitsever.github.io/keycream/guide/installation#update) - asks when a new release is out and installs it with one click.
 - 📦 [**Your own packs**](https://halitsever.github.io/keycream/guide/sound-packs#adding-your-own-pack) - KeyCream reads the Mechvibes pack format, so you can add any pack you like.
 
 <p align="center" >

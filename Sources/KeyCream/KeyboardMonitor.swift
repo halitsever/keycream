@@ -2,7 +2,8 @@ import AppKit
 
 /** Listen-only event tap that reports physical key presses. Needs Input Monitoring permission. */
 final class KeyboardMonitor {
-    var onKeyDown: ((Int64) -> Void)?
+    /** Key code and the modifiers held with it. Flags are nil for media keys, which can't be part of a shortcut. */
+    var onKeyDown: ((Int64, CGEventFlags?) -> Void)?
 
     private var tap: CFMachPort?
     private var runLoopSource: CFRunLoopSource?
@@ -33,6 +34,9 @@ final class KeyboardMonitor {
     static func requestPermission() -> Bool { CGRequestListenEventAccess() }
 
     var isRunning: Bool { tap != nil }
+
+    /** False once macOS has turned the tap off for good, for example after Input Monitoring was revoked. */
+    var isHealthy: Bool { tap.map { CGEvent.tapIsEnabled(tap: $0) } ?? false }
 
     func start() -> Bool {
         guard tap == nil else { return true }
@@ -78,14 +82,14 @@ final class KeyboardMonitor {
             if let tap { CGEvent.tapEnable(tap: tap, enable: true) }
         case .keyDown:
             if event.getIntegerValueField(.keyboardEventAutorepeat) != 0 { return }
-            onKeyDown?(event.getIntegerValueField(.keyboardEventKeycode))
+            onKeyDown?(event.getIntegerValueField(.keyboardEventKeycode), event.flags)
         case .flagsChanged:
             let keyCode = event.getIntegerValueField(.keyboardEventKeycode)
             if keyCode == Self.capsLockKeyCode {
                 // Caps Lock sends one event per press, toggling on and off.
-                onKeyDown?(keyCode)
+                onKeyDown?(keyCode, event.flags)
             } else if let mask = Self.modifierMasks[keyCode], event.flags.rawValue & mask != 0 {
-                onKeyDown?(keyCode)
+                onKeyDown?(keyCode, event.flags)
             }
         default:
             if UInt(type.rawValue) == NSEvent.EventType.systemDefined.rawValue {
@@ -101,6 +105,6 @@ final class KeyboardMonitor {
         let isDown = (data & 0xFF00) >> 8 == 0x0A
         let isRepeat = data & 0x1 != 0
         guard isDown, !isRepeat, let keyCode = Self.mediaKeyPositions[(data & 0xFFFF_0000) >> 16] else { return }
-        onKeyDown?(keyCode)
+        onKeyDown?(keyCode, nil)
     }
 }

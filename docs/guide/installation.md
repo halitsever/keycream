@@ -43,13 +43,17 @@ Input Monitoring lets KeyCream know which key was pressed. It can't change, bloc
 
 ## Open at login
 
-KeyCream adds itself to your login items the first time it runs, so it's there every time you start your Mac. Turn this off with **Open at Login** in its menu, or under **System Settings → General → Login Items**.
+KeyCream adds itself to your login items the first time it runs, so it's there every time you start your Mac. Turn this off with **Open at Login** in its settings, or under **System Settings → General → Login Items**.
 
 ## Update
 
-Download the new release and replace the old KeyCream in Applications. Your settings are kept.
+Each time KeyCream opens it looks for a new release on GitHub. When there is one, it asks you first. Choose **Install and Restart** and it downloads the new version, checks that it came from this project, replaces itself and opens again. Your settings are kept. Choose **Later** and it asks again the next time it opens.
 
-If KeyCream stays silent after an update, macOS wants to confirm Input Monitoring again. Select KeyCream in the Input Monitoring list, remove it with the **−** button, then add it back or reopen KeyCream.
+To look right away, choose **Check for Updates…** from the menu. To stop the check at launch, turn off **Check for Updates Automatically** on the About tab of its settings.
+
+If KeyCream can't replace itself, for example because it sits in a folder you can't write to, it offers to open the release page. Download the new release there and replace the old KeyCream in Applications.
+
+Every release from 0.1.5 on is signed with the same certificate, so macOS keeps the Input Monitoring permission across updates. Coming from 0.1.4 or earlier, it may ask one more time. If KeyCream stays silent after that update, select it in the Input Monitoring list, remove it with the **−** button, then add it back or reopen KeyCream.
 
 ## Uninstall
 

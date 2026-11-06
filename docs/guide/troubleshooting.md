@@ -11,15 +11,12 @@ Check these in order:
 1. **Input Monitoring.** Open **System Settings → Privacy & Security → Input Monitoring** and make sure KeyCream is turned on. If the KeyCream menu shows **Grant Input Monitoring Access…**, it doesn't have permission yet.
 2. **Sounds On.** Open the KeyCream menu and check that **Sounds On** is ticked.
 3. **Your Mac's volume.** KeyCream plays through your current output, so a muted Mac or a quiet output device mutes it too.
-4. **Output device.** Play a sound from another app. If that is silent too, the problem is the output device, not KeyCream.
-
-## Key sounds don't get louder when I turn up my Mac
-
-That's **Volume Limit**, which starts at 50%. In the KeyCream menu, choose a higher limit or **Off** to let key sounds follow your Mac's volume. [Using KeyCream](/guide/usage#volume-limit) explains how it works.
+4. **Output device.** Play a sound from another app. If that is silent too, the problem is the output device, not KeyCream. If you picked a device under **Output Device** in the KeyCream menu, check that it's the one you're listening to.
+5. **Lower During Calls and Media.** With this on, key sounds play at 5% while Zoom, Teams, Slack, Spotify or a similar app is open, even in the background. Turn it off in **Settings → Sound** if that's too quiet.
 
 ## It went quiet after an update
 
-macOS ties the Input Monitoring permission to the exact app you allowed. After an update it may treat KeyCream as a different app, while the switch in System Settings still looks on.
+macOS ties the Input Monitoring permission to the app's signature. Releases from 0.1.5 on share one, but when you update from 0.1.4 or earlier, or run a copy you built yourself, macOS treats KeyCream as a different app while the switch in System Settings still looks on.
 
 Select KeyCream in the Input Monitoring list, remove it with the **−** button, and reopen KeyCream. Allow access when asked. If you prefer Terminal:
 
@@ -33,7 +30,7 @@ That's the first-launch check for apps from outside the App Store. Go to **Syste
 
 ## It doesn't start when I log in
 
-Open the KeyCream menu and check **Open at Login**. If it shows a dash instead of a tick, KeyCream is turned off in your Mac's login items. Turn it back on under **System Settings → General → Login Items**.
+Open **Settings…** from the KeyCream menu and check **Open at Login** on the General tab. If it says macOS is waiting for your approval, KeyCream is turned off in your Mac's login items. Click **Open Login Items…** and turn it back on there.
 
 If you moved KeyCream after it added itself to login items, open it once from its new place and toggle **Open at Login** off and on.
 
@@ -43,7 +40,7 @@ The app's sound files are missing or damaged. Download the latest release again 
 
 ## The menu is in the wrong language
 
-Choose **Language** in the menu and pick the one you want. **System Language** follows **System Settings → General → Language & Region**, using the first language there that KeyCream supports.
+Open **Settings…** from the KeyCream menu, choose **Language** on the General tab and pick the one you want. **System Language** follows **System Settings → General → Language & Region**, using the first language there that KeyCream supports.
 
 ## Still stuck?
 
