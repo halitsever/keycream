@@ -1,261 +1,225 @@
 import AppKit
-import ServiceManagement
 
 @MainActor
-final class AppDelegate: NSObject, NSApplicationDelegate {
-    private enum DefaultsKey {
-        static let enabled = "enabled"
-        static let volume = "volume"
-        static let launchAtLoginConfigured = "launchAtLoginConfigured"
-        static let soundPack = "soundPack"
-        static let volumeLimit = "volumeLimit"
-    }
-
-    /** Titles are string keys so they follow a language change made while the app runs. */
-    private let volumeLevels: [(titleKey: String, value: Float)] = [
-        ("volume_low", 0.3), ("volume_medium", 0.6), ("volume_high", 1.0),
-    ]
-
-    /** System volume above which key sounds stop getting louder. 1 turns the limit off. */
-    private let volumeLimits: [Float] = [1.0, 0.25, 0.5, 0.75]
-
+final class AppDelegate: NSObject, NSApplicationDelegate, NSMenuDelegate {
+    private let app = AppController()
+    private let settingsWindow = SettingsWindowController()
     private var statusItem: NSStatusItem!
-    private var player: SoundPlayer?
-    private let outputVolume = OutputVolume()
-    private var packs: [SoundPack] = []
-    private var loadedPackID: String?
-    private let monitor = KeyboardMonitor()
-    private var permissionTimer: Timer?
+    /** Kept so dragging the volume slider moves the checkmark while the menu is open. */
+    private var volumePresetItems: [NSMenuItem] = []
 
-    private var isEnabled: Bool {
-        get { UserDefaults.standard.object(forKey: DefaultsKey.enabled) as? Bool ?? true }
-        set { UserDefaults.standard.set(newValue, forKey: DefaultsKey.enabled) }
-    }
-
-    private var volume: Float {
-        get { UserDefaults.standard.object(forKey: DefaultsKey.volume) as? Float ?? 1.0 }
-        set { UserDefaults.standard.set(newValue, forKey: DefaultsKey.volume) }
-    }
-
-    private var volumeLimit: Float {
-        get { UserDefaults.standard.object(forKey: DefaultsKey.volumeLimit) as? Float ?? 0.5 }
-        set { UserDefaults.standard.set(newValue, forKey: DefaultsKey.volumeLimit) }
-    }
+    private var preferences: Preferences { app.preferences }
 
     func applicationDidFinishLaunching(_ notification: Notification) {
         statusItem = NSStatusBar.system.statusItem(withLength: NSStatusItem.squareLength)
         let icon = NSImage(named: "MenuBarIconTemplate") ?? NSImage(systemSymbolName: "keyboard", accessibilityDescription: "KeyCream")
         icon?.isTemplate = true
         statusItem.button?.image = icon
-
-        packs = SoundPack.bundled()
-        do {
-            player = try SoundPlayer()
-        } catch {
-            print("Failed to start audio: \(error)")
-        }
-        outputVolume.onChange = { [weak self] in self?.applyVolume() }
-        applyVolume()
-        let savedID = UserDefaults.standard.string(forKey: DefaultsKey.soundPack) ?? SoundPack.defaultID
-        if !loadPack(id: savedID), savedID != SoundPack.defaultID {
-            loadPack(id: SoundPack.defaultID)
-        }
-
-        monitor.onKeyDown = { [weak self] keyCode in
-            guard let code = KeyCodeMap.mechvibesCode(for: keyCode) else { return }
-            self?.player?.play(code: code)
-        }
-
-        enableLaunchAtLoginOnFirstRun()
-        if !KeyboardMonitor.hasPermission {
-            KeyboardMonitor.requestPermission()
-        }
-        updateMonitoring()
-        rebuildMenu()
-    }
-
-    /** The tap can only be created after the user grants Input Monitoring, so poll until then. */
-    private func updateMonitoring() {
-        guard isEnabled else {
-            monitor.stop()
-            return
-        }
-        if monitor.start() {
-            permissionTimer?.invalidate()
-            permissionTimer = nil
-            return
-        }
-        guard permissionTimer == nil else { return }
-        permissionTimer = Timer.scheduledTimer(withTimeInterval: 1, repeats: true) { [weak self] _ in
-            MainActor.assumeIsolated {
-                guard let self, self.monitor.start() else { return }
-                self.permissionTimer?.invalidate()
-                self.permissionTimer = nil
-                self.rebuildMenu()
-            }
-        }
-    }
-
-    private func rebuildMenu() {
+        statusItem.button?.imagePosition = .imageLeading
+        // Filled in each time it opens, so it never shows a stale state.
         let menu = NSMenu()
+        menu.delegate = self
+        statusItem.menu = menu
 
-        let toggle = NSMenuItem(title: Localization.string("sounds_enabled"), action: #selector(toggleEnabled), keyEquivalent: "")
-        toggle.state = isEnabled ? .on : .off
+        app.onMenuBarIconChange = { [weak self] in self?.updateStatusButton() }
+        app.onLanguageChange = { [weak self] in self?.settingsWindow.updateTitle() }
+        app.start()
+        updateStatusButton()
+    }
+
+    private func updateStatusButton() {
+        guard let button = statusItem.button else { return }
+        statusItem.length = preferences.showsNameInMenuBar ? NSStatusItem.variableLength : NSStatusItem.squareLength
+        button.title = preferences.showsNameInMenuBar ? " KeyCream" : ""
+        button.alphaValue = preferences.dimsMenuBarIcon ? 0.5 : 1
+    }
+
+    // MARK: - Menu
+
+    func menuNeedsUpdate(_ menu: NSMenu) {
+        guard menu === statusItem.menu else { return }
+        menu.removeAllItems()
+
+        let shortcut = preferences.toggleShortcut
+        let toggle = item("sounds_enabled", #selector(toggleEnabled), key: shortcut?.characters ?? "")
+        toggle.keyEquivalentModifierMask = shortcut?.modifierFlags ?? []
+        toggle.state = preferences.isEnabled ? .on : .off
         menu.addItem(toggle)
+        menu.addItem(.separator())
 
-        let volumeItem = NSMenuItem(title: Localization.string("volume"), action: nil, keyEquivalent: "")
-        let volumeMenu = NSMenu()
-        for (index, level) in volumeLevels.enumerated() {
-            let item = NSMenuItem(title: Localization.string(level.titleKey), action: #selector(selectVolume(_:)), keyEquivalent: "")
-            item.tag = index
-            item.state = abs(level.value - volume) < 0.01 ? .on : .off
-            volumeMenu.addItem(item)
-        }
-        volumeItem.submenu = volumeMenu
-        menu.addItem(volumeItem)
+        menu.addItem(submenu("volume", volumeMenu()))
+        menu.addItem(submenu("sound_pack", soundPackMenu()))
+        menu.addItem(submenu("output_device", outputDeviceMenu()))
 
-        let limitItem = NSMenuItem(title: Localization.string("volume_limit"), action: nil, keyEquivalent: "")
-        let limitMenu = NSMenu()
-        let limitHint = Localization.string("volume_limit_hint")
-        for (index, limit) in volumeLimits.enumerated() {
-            let title = limit >= 1 ? Localization.string("volume_limit_off") : limit.formatted(.percent.locale(Localization.locale))
-            let item = NSMenuItem(title: title, action: #selector(selectVolumeLimit(_:)), keyEquivalent: "")
-            item.tag = index
-            item.toolTip = limitHint
-            item.state = abs(limit - volumeLimit) < 0.01 ? .on : .off
-            limitMenu.addItem(item)
-        }
-        limitItem.submenu = limitMenu
-        menu.addItem(limitItem)
-
-        let packItem = NSMenuItem(title: Localization.string("sound_pack"), action: nil, keyEquivalent: "")
-        let packMenu = NSMenu()
-        for pack in packs {
-            let item = NSMenuItem(title: pack.name, action: #selector(selectSoundPack(_:)), keyEquivalent: "")
-            item.representedObject = pack.id
-            item.state = pack.id == loadedPackID ? .on : .off
-            packMenu.addItem(item)
-        }
-        packItem.submenu = packMenu
-        menu.addItem(packItem)
-
-        let loginItem = NSMenuItem(title: Localization.string("launch_at_login"), action: #selector(toggleLaunchAtLogin), keyEquivalent: "")
-        switch SMAppService.mainApp.status {
-        case .enabled: loginItem.state = .on
-        case .requiresApproval: loginItem.state = .mixed
-        default: loginItem.state = .off
-        }
-        menu.addItem(loginItem)
-
-        let languageItem = NSMenuItem(title: Localization.string("language"), action: nil, keyEquivalent: "")
-        let languageMenu = NSMenu()
-        let override = Localization.override
-        let systemItem = NSMenuItem(title: Localization.string("language_system"), action: #selector(selectLanguage(_:)), keyEquivalent: "")
-        systemItem.state = override == nil ? .on : .off
-        languageMenu.addItem(systemItem)
-        languageMenu.addItem(.separator())
-        for language in Localization.languages {
-            let item = NSMenuItem(title: language.name, action: #selector(selectLanguage(_:)), keyEquivalent: "")
-            item.representedObject = language.code
-            item.state = override == language.code ? .on : .off
-            languageMenu.addItem(item)
-        }
-        languageItem.submenu = languageMenu
-        menu.addItem(languageItem)
-
-        if loadedPackID == nil {
+        if app.loadedPackID == nil {
             menu.addItem(.separator())
             menu.addItem(NSMenuItem(title: Localization.string("sound_pack_failed"), action: nil, keyEquivalent: ""))
         }
-        if isEnabled && !monitor.isRunning {
+        if preferences.isEnabled && !app.isMonitoring {
             menu.addItem(.separator())
-            menu.addItem(NSMenuItem(title: Localization.string("grant_permission"), action: #selector(openPermissionSettings), keyEquivalent: ""))
+            menu.addItem(item("grant_permission", #selector(openPermissionSettings)))
         }
 
         menu.addItem(.separator())
+        menu.addItem(item("settings_open", #selector(openSettings), key: ","))
+        // An item without an action is shown disabled while a check or download runs.
+        switch app.updateState {
+        case .idle: menu.addItem(item("check_for_updates", #selector(checkForUpdates)))
+        case .checking: menu.addItem(item("check_for_updates", nil))
+        case .downloading: menu.addItem(item("update_downloading", nil))
+        }
+        menu.addItem(.separator())
         menu.addItem(NSMenuItem(title: Localization.string("quit"), action: #selector(NSApplication.terminate(_:)), keyEquivalent: "q"))
-        statusItem.menu = menu
     }
 
+    private func volumeMenu() -> NSMenu {
+        let menu = NSMenu()
+        let sliderItem = NSMenuItem()
+        sliderItem.view = MenuVolumeSlider(value: preferences.volume) { [weak self] value in
+            self?.preferences.volume = value
+            self?.updateVolumePresetStates()
+        }
+        menu.addItem(sliderItem)
+        menu.addItem(.separator())
+
+        volumePresetItems = Preferences.volumeLevels.enumerated().map { index, level in
+            let presetItem = item(level.titleKey, #selector(selectVolume(_:)))
+            presetItem.tag = index
+            return presetItem
+        }
+        volumePresetItems.forEach(menu.addItem)
+        updateVolumePresetStates()
+        return menu
+    }
+
+    private func updateVolumePresetStates() {
+        for (index, presetItem) in volumePresetItems.enumerated() {
+            presetItem.state = abs(Preferences.volumeLevels[index].value - preferences.volume) < 0.01 ? .on : .off
+        }
+    }
+
+    private func soundPackMenu() -> NSMenu {
+        let menu = NSMenu()
+        for group in SoundPack.groupedByBrand(app.packs) {
+            if menu.numberOfItems > 0 { menu.addItem(.separator()) }
+            menu.addItem(.sectionHeader(title: group.title))
+            for pack in group.packs {
+                let packItem = NSMenuItem(title: pack.switchName, action: #selector(selectSoundPack(_:)), keyEquivalent: "")
+                packItem.target = self
+                packItem.representedObject = pack.id
+                packItem.state = pack.id == app.loadedPackID ? .on : .off
+                menu.addItem(packItem)
+            }
+        }
+        return menu
+    }
+
+    private func outputDeviceMenu() -> NSMenu {
+        let menu = NSMenu()
+        let systemItem = item("output_device_system", #selector(selectOutputDevice(_:)))
+        systemItem.state = preferences.outputDeviceUID == nil ? .on : .off
+        menu.addItem(systemItem)
+        menu.addItem(.separator())
+        for device in app.outputDevices {
+            let deviceItem = NSMenuItem(title: device.name, action: #selector(selectOutputDevice(_:)), keyEquivalent: "")
+            deviceItem.target = self
+            deviceItem.representedObject = device.uid
+            deviceItem.state = device.uid == preferences.outputDeviceUID ? .on : .off
+            menu.addItem(deviceItem)
+        }
+        if let name = preferences.outputDeviceName, app.chosenOutputDevice == nil {
+            let missing = NSMenuItem(title: String(format: Localization.string("output_device_disconnected"), name), action: nil, keyEquivalent: "")
+            missing.state = .on
+            menu.addItem(missing)
+        }
+        return menu
+    }
+
+    private func item(_ titleKey: String, _ action: Selector?, key: String = "") -> NSMenuItem {
+        let menuItem = NSMenuItem(title: Localization.string(titleKey), action: action, keyEquivalent: key)
+        menuItem.target = action == nil ? nil : self
+        return menuItem
+    }
+
+    private func submenu(_ titleKey: String, _ submenu: NSMenu) -> NSMenuItem {
+        let menuItem = NSMenuItem(title: Localization.string(titleKey), action: nil, keyEquivalent: "")
+        menuItem.submenu = submenu
+        return menuItem
+    }
+
+    // MARK: - Actions
+
     @objc private func toggleEnabled() {
-        isEnabled.toggle()
-        updateMonitoring()
-        rebuildMenu()
+        app.toggleEnabled()
     }
 
     @objc private func selectVolume(_ sender: NSMenuItem) {
-        volume = volumeLevels[sender.tag].value
-        applyVolume()
-        rebuildMenu()
-    }
-
-    @objc private func selectVolumeLimit(_ sender: NSMenuItem) {
-        volumeLimit = volumeLimits[sender.tag]
-        applyVolume()
-        rebuildMenu()
-    }
-
-    private func applyVolume() {
-        player?.volume = volume * outputVolume.gain(limit: volumeLimit)
-    }
-
-    @discardableResult
-    private func loadPack(id: String) -> Bool {
-        guard let player, let pack = packs.first(where: { $0.id == id }) else { return false }
-        do {
-            try player.load(pack)
-            loadedPackID = pack.id
-            return true
-        } catch {
-            print("Failed to load sound pack \(id): \(error)")
-            return false
-        }
+        preferences.volume = Preferences.volumeLevels[sender.tag].value
     }
 
     @objc private func selectSoundPack(_ sender: NSMenuItem) {
-        guard let id = sender.representedObject as? String, loadPack(id: id) else { return }
-        UserDefaults.standard.set(id, forKey: DefaultsKey.soundPack)
-        rebuildMenu()
+        guard let id = sender.representedObject as? String else { return }
+        preferences.soundPackID = id
     }
 
-    @objc private func selectLanguage(_ sender: NSMenuItem) {
-        Localization.override = sender.representedObject as? String
-        rebuildMenu()
+    @objc private func selectOutputDevice(_ sender: NSMenuItem) {
+        let uid = sender.representedObject as? String
+        preferences.selectOutputDevice(app.outputDevices.first { $0.uid == uid })
     }
 
-    /** On by default, but only once, so turning it off from the menu sticks. */
-    private func enableLaunchAtLoginOnFirstRun() {
-        let defaults = UserDefaults.standard
-        guard !defaults.bool(forKey: DefaultsKey.launchAtLoginConfigured) else { return }
-        do {
-            try SMAppService.mainApp.register()
-            defaults.set(true, forKey: DefaultsKey.launchAtLoginConfigured)
-        } catch {
-            print("Launch at login registration failed: \(error)")
-        }
+    @objc private func openSettings() {
+        settingsWindow.show(app)
     }
 
-    @objc private func toggleLaunchAtLogin() {
-        let service = SMAppService.mainApp
-        do {
-            if service.status == .enabled || service.status == .requiresApproval {
-                try service.unregister()
-            } else {
-                try service.register()
-            }
-        } catch {
-            print("Launch at login change failed: \(error)")
-        }
-        // The user may have turned the item off in System Settings, which register() cannot override.
-        if service.status == .requiresApproval {
-            SMAppService.openSystemSettingsLoginItems()
-        }
-        rebuildMenu()
+    @objc private func checkForUpdates() {
+        app.checkForUpdates()
     }
 
     @objc private func openPermissionSettings() {
-        if let url = URL(string: "x-apple.systempreferences:com.apple.preference.security?Privacy_ListenEvent") {
-            NSWorkspace.shared.open(url)
+        app.openPermissionSettings()
+    }
+}
+
+/** Menus can only host a slider through a custom view. */
+private final class MenuVolumeSlider: NSView {
+    private let slider: NSSlider
+    private let onChange: (Float) -> Void
+
+    init(value: Float, onChange: @escaping (Float) -> Void) {
+        self.onChange = onChange
+        slider = NSSlider(value: Double(value), minValue: 0, maxValue: 1, target: nil, action: nil)
+        super.init(frame: NSRect(x: 0, y: 0, width: 240, height: 28))
+
+        let quiet = NSImageView(image: NSImage(systemSymbolName: "speaker.fill", accessibilityDescription: nil) ?? NSImage())
+        let loud = NSImageView(image: NSImage(systemSymbolName: "speaker.wave.3.fill", accessibilityDescription: nil) ?? NSImage())
+        for icon in [quiet, loud] {
+            icon.contentTintColor = .secondaryLabelColor
+            icon.translatesAutoresizingMaskIntoConstraints = false
+            addSubview(icon)
         }
+        slider.target = self
+        slider.action = #selector(sliderMoved)
+        slider.isContinuous = true
+        slider.setAccessibilityLabel(Localization.string("volume"))
+        slider.translatesAutoresizingMaskIntoConstraints = false
+        addSubview(slider)
+
+        NSLayoutConstraint.activate([
+            quiet.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 20),
+            quiet.centerYAnchor.constraint(equalTo: centerYAnchor),
+            slider.leadingAnchor.constraint(equalTo: quiet.trailingAnchor, constant: 8),
+            slider.centerYAnchor.constraint(equalTo: centerYAnchor),
+            loud.leadingAnchor.constraint(equalTo: slider.trailingAnchor, constant: 8),
+            loud.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -16),
+            loud.centerYAnchor.constraint(equalTo: centerYAnchor),
+        ])
+    }
+
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) is not used")
+    }
+
+    @objc private func sliderMoved() {
+        onChange(slider.floatValue)
     }
 }
