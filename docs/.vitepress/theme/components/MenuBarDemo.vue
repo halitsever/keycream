@@ -1,9 +1,9 @@
 <script setup lang="ts">
 import { ref } from 'vue'
-import { languages, packs } from '../data/packs'
+import { packs } from '../data/packs'
 import { useSamples } from '../composables/useSamples'
 
-type Submenu = 'volume' | 'pack' | 'language'
+type Submenu = 'volume' | 'pack' | 'output'
 
 /** Same levels as the app's Volume menu. */
 const levels = [
@@ -16,10 +16,11 @@ const { play, stop } = useSamples()
 const menuOpen = ref(true)
 const open = ref<Submenu | null>('pack')
 const soundsOn = ref(true)
-const openAtLogin = ref(true)
-const volume = ref(2)
+/** Example outputs, since the demo can't see the visitor's real devices. */
+const outputs = ['MacBook Pro Speakers', 'AirPods Pro']
+const volume = ref(1)
 const packId = ref(packs[0].id)
-const language = ref<string | null>(null)
+const output = ref<string | null>(null)
 
 function audition(id: string) {
   if (soundsOn.value) play(id, levels[volume.value].value)
@@ -121,33 +122,31 @@ function toggleMenu() {
         </div>
       </div>
 
-      <button class="mi" type="button" role="menuitemcheckbox" :aria-checked="openAtLogin" @mouseenter="open = null" @click="openAtLogin = !openAtLogin">
-        <span v-if="openAtLogin" class="ck" aria-hidden="true">✓</span>Open at Login
-      </button>
-
-      <div class="has-sub" @mouseenter="open = 'language'">
-        <button class="mi" :class="{ hi: open === 'language' }" type="button" aria-haspopup="menu" :aria-expanded="open === 'language'" @click="open = 'language'">
-          Language<span class="ar" aria-hidden="true">›</span>
+      <div class="has-sub" @mouseenter="open = 'output'">
+        <button class="mi" :class="{ hi: open === 'output' }" type="button" aria-haspopup="menu" :aria-expanded="open === 'output'" @click="open = 'output'">
+          Output Device<span class="ar" aria-hidden="true">›</span>
         </button>
-        <div v-if="open === 'language'" class="submenu lang" role="menu" aria-label="Language">
-          <button class="mi" type="button" role="menuitemradio" :aria-checked="language === null" @click="language = null">
-            <span v-if="language === null" class="ck" aria-hidden="true">✓</span>System Language
+        <div v-if="open === 'output'" class="submenu lang" role="menu" aria-label="Output Device">
+          <button class="mi" type="button" role="menuitemradio" :aria-checked="output === null" @click="output = null">
+            <span v-if="output === null" class="ck" aria-hidden="true">✓</span>System Default
           </button>
           <hr />
           <button
-            v-for="name in languages"
+            v-for="name in outputs"
             :key="name"
             class="mi"
             type="button"
             role="menuitemradio"
-            :aria-checked="language === name"
-            @click="language = name"
+            :aria-checked="output === name"
+            @click="output = name"
           >
-            <span v-if="language === name" class="ck" aria-hidden="true">✓</span>{{ name }}
+            <span v-if="output === name" class="ck" aria-hidden="true">✓</span>{{ name }}
           </button>
         </div>
       </div>
 
+      <hr />
+      <button class="mi" type="button" @mouseenter="open = null">Settings…<kbd>⌘,</kbd></button>
       <hr />
       <button class="mi" type="button" @mouseenter="open = null" @click="quit">Quit<kbd>⌘Q</kbd></button>
     </div>

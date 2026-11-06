@@ -1,6 +1,6 @@
 # Security Policy
 
-KeyCream needs the Input Monitoring permission to hear key presses, so it is held to a high standard: it only reads which physical key was pressed, never what you type, and it makes no network connections.
+KeyCream needs the Input Monitoring permission to hear key presses, so it is held to a high standard: it only reads which physical key was pressed, never what you type, and its only network requests go to GitHub, to check for and download updates.
 
 ## Supported versions
 
