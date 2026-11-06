@@ -49,8 +49,12 @@ if [[ -z "$SIGN_IDENTITY" || "$SIGN_IDENTITY" == "-" ]]; then
     # Input Monitoring is granted per ad-hoc signature, so every rebuild needs re-granting.
     codesign --force --sign - "$APP"
     echo "Built $APP (ad-hoc signed)"
-else
+elif [[ "$SIGN_IDENTITY" == "Developer ID Application"* ]]; then
     # Notarization requires the hardened runtime and a secure timestamp.
     codesign --force --options runtime --timestamp --sign "$SIGN_IDENTITY" "$APP"
     echo "Built $APP (signed by $SIGN_IDENTITY)"
+else
+    # Any other certificate, such as a self-signed one, can't be notarized but keeps Input Monitoring across builds.
+    codesign --force --sign "$SIGN_IDENTITY" "$APP"
+    echo "Built $APP (signed by $SIGN_IDENTITY, not notarizable)"
 fi

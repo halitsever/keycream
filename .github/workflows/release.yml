@@ -65,9 +65,16 @@ jobs:
           security list-keychains -d user -s "$KEYCHAIN" $(security list-keychains -d user | tr -d '"')
           rm "$RUNNER_TEMP/certificate.p12"
           IDENTITY=$(security find-identity -v -p codesigning "$KEYCHAIN" | awk -F'"' '/Developer ID Application/ { print $2; exit }')
-          if [ -z "$IDENTITY" ]; then
-            echo "::error::The certificate in MACOS_CERTIFICATE_P12 is not a Developer ID Application certificate."
-            exit 1
+          if [ -n "$IDENTITY" ]; then
+            echo "notarize=true" >> "$GITHUB_OUTPUT"
+          else
+            # A self-signed certificate isn't trusted, so only the listing without -v shows it.
+            IDENTITY=$(security find-identity -p codesigning "$KEYCHAIN" | awk '$1 == "1)" { print $2; exit }')
+            if [ -z "$IDENTITY" ]; then
+              echo "::error::MACOS_CERTIFICATE_P12 holds no code signing certificate."
+              exit 1
+            fi
+            echo "::warning::The certificate isn't a Developer ID Application certificate, so the release is signed but not notarized."
           fi
           echo "identity=$IDENTITY" >> "$GITHUB_OUTPUT"
 
@@ -81,7 +88,7 @@ jobs:
 
       - name: Notarize
         id: notarize
-        if: steps.signing.outputs.identity != '-'
+        if: steps.signing.outputs.notarize == 'true'
         run: |
           KEY="$RUNNER_TEMP/AuthKey.p8"
           echo "$APPLE_API_KEY_P8" | base64 --decode > "$KEY"
