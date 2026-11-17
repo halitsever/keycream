@@ -4,6 +4,23 @@ import type { ThemeConfig } from './theme/types'
 const site = 'https://halitsever.github.io/keycream/'
 const description = 'Mechanical keyboard sounds for your Mac. A free, open-source menu bar app that plays a real switch recording for every keystroke.'
 
+const jsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'SoftwareApplication',
+  name: 'KeyCream',
+  description,
+  url: site,
+  image: `${site}og.png`,
+  applicationCategory: 'UtilitiesApplication',
+  operatingSystem: 'macOS',
+  offers: { '@type': 'Offer', price: '0', priceCurrency: 'USD' },
+  downloadUrl: 'https://github.com/halitsever/keycream/releases/latest',
+  codeRepository: 'https://github.com/halitsever/keycream',
+  programmingLanguage: 'Swift',
+  license: 'https://opensource.org/licenses/MIT',
+  author: { '@type': 'Person', name: 'Halit Sever', url: 'https://github.com/halitsever' },
+}
+
 export default defineConfigWithTheme<ThemeConfig>({
   base: '/keycream/',
   lang: 'en',
@@ -24,15 +41,21 @@ export default defineConfigWithTheme<ThemeConfig>({
     ['meta', { name: 'theme-color', content: '#09090B' }],
     ['meta', { property: 'og:type', content: 'website' }],
     ['meta', { property: 'og:site_name', content: 'KeyCream' }],
-    ['meta', { property: 'og:image', content: `${site}app-icon.png` }],
-    ['meta', { name: 'twitter:card', content: 'summary' }],
+    ['meta', { property: 'og:image', content: `${site}og.png` }],
+    ['meta', { property: 'og:image:width', content: '1280' }],
+    ['meta', { property: 'og:image:height', content: '640' }],
+    ['meta', { name: 'twitter:card', content: 'summary_large_image' }],
+    ['script', { type: 'application/ld+json' }, JSON.stringify(jsonLd)],
   ],
 
   transformPageData(pageData) {
     const title = pageData.frontmatter.title ?? pageData.title
+    const url = site + pageData.relativePath.replace(/(^|\/)index\.md$/, '$1').replace(/\.md$/, '')
     pageData.frontmatter.head ??= []
     pageData.frontmatter.head.push(
-      ['meta', { property: 'og:title', content: pageData.frontmatter.layout === 'home' ? 'KeyCream' : `${title} – KeyCream` }],
+      ['link', { rel: 'canonical', href: url }],
+      ['meta', { property: 'og:url', content: url }],
+      ['meta', { property: 'og:title', content: pageData.frontmatter.layout === 'home' ? 'KeyCream – Mechanical keyboard sounds for your Mac' : `${title} – KeyCream` }],
       ['meta', { property: 'og:description', content: pageData.frontmatter.description ?? description }],
     )
   },

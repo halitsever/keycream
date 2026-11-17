@@ -1,13 +1,13 @@
 <p align="center" class="logo-section">
-<img src="Resources/Icons/AppIcon-1024.png" height="80" width="80"/>
+<img src="Resources/Icons/AppIcon-1024.png" alt="KeyCream app icon" height="80" width="80"/>
 </br>
 <img src="https://halitsever-api.vercel.app/api/repo-title?title=KeyCream">
 
 <p align="center">
-⌨️ Mechanical keyboard sounds for your Mac, right from the menu bar.<br>
+⌨️ Mechanical keyboard sounds for your Mac: a free, open-source macOS menu bar app that plays a real switch recording for every keystroke.<br>
 <br/>
 <br/>
-<img src="https://img.shields.io/github/sponsors/halitsever"/>
+<img src="https://img.shields.io/github/sponsors/halitsever" alt="GitHub Sponsors"/>
 </p>
 <p align="center">
 <a align="center" href="https://halitsever.github.io/keycream/">Documentation</a>
@@ -52,6 +52,11 @@ open build/KeyCream.app
 
 <p align="center" href="https://github.com/halitsever/keycream/issues">
 <img src="https://halitsever-api.vercel.app/api/issue"/>
+</p>
+
+<p align="center">
+Found a bug or have an idea? Open an <a href="https://github.com/halitsever/keycream/issues">issue</a>.<br/>
+Read the <a href="CONTRIBUTING.md">contributing guide</a> before sending a pull request.
 </p>
 
 <p align="center">

@@ -1,0 +1,20 @@
+# KeyCream
+
+> KeyCream is a free, open-source macOS menu bar app written in Swift that plays mechanical keyboard sounds for every keystroke. It ships seven sound packs recorded from real switches and reads Mechvibes-format packs.
+
+Download KeyCream-x.y.z.zip from https://github.com/halitsever/keycream/releases/latest, move it to Applications and allow it under Privacy & Security > Input Monitoring. It needs macOS 14 or later and runs on Apple Silicon and Intel Macs.
+
+## Docs
+
+- [Installation](https://halitsever.github.io/keycream/guide/installation): download, first launch, Input Monitoring permission and updates
+- [Using KeyCream](https://halitsever.github.io/keycream/guide/usage): the menu, the settings window, languages and lowering the volume during calls
+- [Sound packs](https://halitsever.github.io/keycream/guide/sound-packs): the bundled packs, their sources and how to add a Mechvibes pack
+- [Privacy](https://halitsever.github.io/keycream/guide/privacy): what the app reads and stores, and what goes online
+- [Troubleshooting](https://halitsever.github.io/keycream/guide/troubleshooting): fixes for common problems
+- [Building from source](https://halitsever.github.io/keycream/guide/building): build script options, releases and the website
+
+## Optional
+
+- [Home](https://halitsever.github.io/keycream/): overview with sound samples
+- [Source](https://github.com/halitsever/keycream): repository
+- [Releases](https://github.com/halitsever/keycream/releases): downloads and release notes
