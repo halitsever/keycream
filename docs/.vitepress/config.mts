@@ -2,7 +2,7 @@ import { defineConfigWithTheme } from 'vitepress'
 import type { ThemeConfig } from './theme/types'
 
 const site = 'https://halitsever.github.io/keycream/'
-const description = 'Mechanical keyboard sounds for your Mac. A free, open-source menu bar app that plays a real switch recording for every keystroke.'
+const description = 'Mechanical keyboard sounds for Mac. KeyCream is a free, open-source menu bar app that plays a real switch recording for every keystroke, with seven sound packs.'
 
 const jsonLd = {
   '@context': 'https://schema.org',
@@ -55,7 +55,7 @@ export default defineConfigWithTheme<ThemeConfig>({
     pageData.frontmatter.head.push(
       ['link', { rel: 'canonical', href: url }],
       ['meta', { property: 'og:url', content: url }],
-      ['meta', { property: 'og:title', content: pageData.frontmatter.layout === 'home' ? 'KeyCream – Mechanical keyboard sounds for your Mac' : `${title} – KeyCream` }],
+      ['meta', { property: 'og:title', content: pageData.frontmatter.layout === 'home' ? 'Mechanical keyboard sounds for Mac – KeyCream' : `${title} – KeyCream` }],
       ['meta', { property: 'og:description', content: pageData.frontmatter.description ?? description }],
     )
   },
@@ -107,6 +107,10 @@ export default defineConfigWithTheme<ThemeConfig>({
       {
         text: 'Development',
         items: [{ text: 'Building from source', link: '/guide/building' }],
+      },
+      {
+        text: 'Compare',
+        items: [{ text: 'KeyCream vs Klack vs Mechvibes', link: '/guide/keycream-vs-klack-vs-mechvibes' }],
       },
     ],
   },
