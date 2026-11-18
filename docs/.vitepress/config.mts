@@ -4,21 +4,38 @@ import type { ThemeConfig } from './theme/types'
 const site = 'https://halitsever.github.io/keycream/'
 const description = 'Mechanical keyboard sounds for Mac. KeyCream is a free, open-source menu bar app that plays a real switch recording for every keystroke, with seven sound packs.'
 
+const repo = 'https://github.com/halitsever/keycream'
+const license = 'https://opensource.org/licenses/MIT'
+const author = { '@type': 'Person', name: 'Halit Sever', url: 'https://github.com/halitsever' }
+
 const jsonLd = {
   '@context': 'https://schema.org',
-  '@type': 'SoftwareApplication',
-  name: 'KeyCream',
-  description,
-  url: site,
-  image: `${site}og.png`,
-  applicationCategory: 'UtilitiesApplication',
-  operatingSystem: 'macOS',
-  offers: { '@type': 'Offer', price: '0', priceCurrency: 'USD' },
-  downloadUrl: 'https://github.com/halitsever/keycream/releases/latest',
-  codeRepository: 'https://github.com/halitsever/keycream',
-  programmingLanguage: 'Swift',
-  license: 'https://opensource.org/licenses/MIT',
-  author: { '@type': 'Person', name: 'Halit Sever', url: 'https://github.com/halitsever' },
+  '@graph': [
+    {
+      '@type': 'SoftwareApplication',
+      '@id': `${site}#app`,
+      name: 'KeyCream',
+      description,
+      url: site,
+      image: `${site}og.png`,
+      applicationCategory: 'UtilitiesApplication',
+      operatingSystem: 'macOS',
+      offers: { '@type': 'Offer', price: '0', priceCurrency: 'USD' },
+      downloadUrl: `${repo}/releases/latest`,
+      license,
+      author,
+    },
+    {
+      '@type': 'SoftwareSourceCode',
+      '@id': `${site}#source`,
+      name: 'KeyCream',
+      codeRepository: repo,
+      programmingLanguage: 'Swift',
+      license,
+      author,
+      targetProduct: { '@id': `${site}#app` },
+    },
+  ],
 }
 
 export default defineConfigWithTheme<ThemeConfig>({
