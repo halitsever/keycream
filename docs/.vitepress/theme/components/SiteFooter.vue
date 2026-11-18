@@ -20,6 +20,7 @@ const repoUrl = `https://github.com/${theme.value.repo}`
       <nav class="links" aria-label="Footer">
         <a :href="withBase('/guide/installation')">Docs</a>
         <a :href="withBase('/guide/privacy')">Privacy</a>
+        <a :href="withBase('/guide/keycream-vs-klack-vs-mechvibes')">Compare</a>
         <a :href="`${repoUrl}/releases`">Releases</a>
         <a :href="`${repoUrl}/issues`">Issues</a>
         <a :href="repoUrl">GitHub</a>

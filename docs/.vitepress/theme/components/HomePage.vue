@@ -56,6 +56,11 @@ const questions = [
     a: 'Yes. Every release is a universal app for Apple Silicon and Intel, running macOS 14 Sonoma or later.',
   },
   {
+    q: 'How is KeyCream different from Klack and Mechvibes?',
+    a: 'Klack is a paid Mac app that records each switch in over 100 audio files. Mechvibes is free, runs on Windows and Linux too, and has a large library of community sound packs. KeyCream is free and made only for the Mac menu bar.',
+    link: { text: 'Compare them side by side', href: '/guide/keycream-vs-klack-vs-mechvibes' },
+  },
+  {
     q: 'It went quiet after an update. What happened?',
     a: 'macOS sometimes asks for Input Monitoring again after an app changes. Remove KeyCream from the Input Monitoring list, add it back, and the sounds return.',
   },
@@ -100,8 +105,8 @@ onBeforeUnmount(() => {
   <div class="home">
     <section class="hero" aria-labelledby="hero-title">
       <div class="wrap hero-copy">
-        <p class="eyebrow">Mechanical keyboard sounds for macOS</p>
-        <h1 id="hero-title">Every key<br /><span class="hl">goes thock.</span></h1>
+        <h1 id="hero-title" class="eyebrow">Mechanical keyboard sounds for Mac</h1>
+        <p class="slogan">Every key<br /><span class="hl">goes thock.</span></p>
         <p class="hero-lede">
           KeyCream plays a real switch recording each time you press a key. It lives in your menu bar, it&rsquo;s free,
           and it never sees what you type.
@@ -228,7 +233,10 @@ onBeforeUnmount(() => {
       <div class="faq">
         <details v-for="item in questions" :key="item.q">
           <summary>{{ item.q }}</summary>
-          <p>{{ item.a }}</p>
+          <p>
+            {{ item.a }}
+            <a v-if="item.link" :href="withBase(item.link.href)">{{ item.link.text }}</a>
+          </p>
         </details>
       </div>
     </section>
@@ -265,7 +273,7 @@ onBeforeUnmount(() => {
 }
 
 .eyebrow,
-h1 {
+.slogan {
   grid-column: 1 / -1;
 }
 
@@ -295,7 +303,7 @@ h1 {
   }
 }
 
-h1 {
+.slogan {
   margin-bottom: 44px;
   font-size: clamp(3.6rem, 11vw, 10rem);
   font-weight: 780;
@@ -670,6 +678,13 @@ h1 {
   color: var(--dim);
 }
 
+.faq details a {
+  color: var(--accent);
+  text-decoration: underline;
+  text-decoration-thickness: 1px;
+  text-underline-offset: 3px;
+}
+
 @media (max-width: 1000px) {
   .bento {
     grid-template-columns: 1fr 1fr;
@@ -691,7 +706,7 @@ h1 {
     row-gap: 28px;
   }
 
-  h1 {
+  .slogan {
     margin-bottom: 4px;
     font-size: 15.5vw;
   }

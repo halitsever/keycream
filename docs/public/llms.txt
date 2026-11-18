@@ -12,6 +12,7 @@ Download KeyCream-x.y.z.zip from https://github.com/halitsever/keycream/releases
 - [Privacy](https://halitsever.github.io/keycream/guide/privacy): what the app reads and stores, and what goes online
 - [Troubleshooting](https://halitsever.github.io/keycream/guide/troubleshooting): fixes for common problems
 - [Building from source](https://halitsever.github.io/keycream/guide/building): build script options, releases and the website
+- [KeyCream vs Klack vs Mechvibes](https://halitsever.github.io/keycream/guide/keycream-vs-klack-vs-mechvibes): price, sound packs, platforms and where each app is stronger, checked 18 November 2026
 
 ## Optional
 
