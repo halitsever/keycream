@@ -52,6 +52,8 @@ export default defineConfigWithTheme<ThemeConfig>({
   srcExclude: ['scripts/**', 'README.md'],
 
   head: [
+    /** Cloudflare Web Analytics, one token for every page on halitsever.github.io. */
+    ['script', { defer: '', src: 'https://static.cloudflareinsights.com/beacon.min.js', 'data-cf-beacon': '{"token": "dd7e54d3f48841c187d72d9dbb92a6b6"}' }],
     ['link', { rel: 'icon', href: '/keycream/favicon.ico', sizes: '32x32' }],
     ['link', { rel: 'icon', href: '/keycream/favicon.svg', type: 'image/svg+xml' }],
     ['link', { rel: 'apple-touch-icon', href: '/keycream/apple-touch-icon.png' }],
