@@ -4,7 +4,7 @@
 <img src="https://halitsever-api.vercel.app/api/repo-title?title=KeyCream">
 
 <p align="center">
-⌨️ Mechanical keyboard sounds for your Mac: a free, open-source macOS menu bar app that plays a real switch recording for every keystroke.<br>
+Mechanical keyboard sounds for your Mac: a free, open-source macOS menu bar app that plays a real switch recording for every keystroke.<br>
 <br/>
 <br/>
 <img src="https://img.shields.io/github/sponsors/halitsever" alt="GitHub Sponsors"/>
@@ -18,16 +18,16 @@
 <img src="https://halitsever-api.vercel.app/api/details"/>
 </p>
 
-- 🎧 [**Seven sound packs**](https://halitsever.github.io/keycream/#packs) - NovelKeys Cream, Cherry MX Black, Red, Brown and Blue, Everglide Crystal Purple and Oreo, each a recording of a real keyboard.
-- ⌨️ [**Every key sounds right**](https://halitsever.github.io/keycream/#how) - letters, Space, Return, Delete, the modifiers and the function row each play their own recording.
-- 🎚️ [**Even volume**](https://halitsever.github.io/keycream/#how) - every key is leveled when a pack loads, so no single key is suddenly louder than the rest.
-- 🖐️ [**Natural typing**](https://halitsever.github.io/keycream/#how) - holding a key plays one click, and fast typing overlaps instead of cutting off.
-- 🧭 [**Menu bar only**](https://halitsever.github.io/keycream/#using) - no Dock icon, it opens at login and remembers your settings.
-- 🔇 [**Steps back when needed**](https://halitsever.github.io/keycream/guide/usage#lower-during-calls-and-media) - can drop to 5% while Zoom, Teams, Spotify and similar apps are open, play on an output of your choice, and turn on or off with a shortcut from any app.
-- 🌍 [**12 languages**](https://halitsever.github.io/keycream/guide/usage#languages) - follows your Mac's language, or pick one in Settings.
-- 🔒 [**Private**](https://halitsever.github.io/keycream/guide/privacy) - reads only which key went down, never what you type, and only goes online to check GitHub for updates.
-- 🔄 [**Updates itself**](https://halitsever.github.io/keycream/guide/installation#update) - asks when a new release is out and installs it with one click.
-- 📦 [**Your own packs**](https://halitsever.github.io/keycream/guide/sound-packs#adding-your-own-pack) - KeyCream reads the Mechvibes pack format, so you can add any pack you like.
+- [**Seven sound packs**](https://halitsever.github.io/keycream/#packs) - NovelKeys Cream, Cherry MX Black, Red, Brown and Blue, Everglide Crystal Purple and Oreo, each a recording of a real keyboard.
+- [**Every key sounds right**](https://halitsever.github.io/keycream/#how) - letters, Space, Return, Delete, the modifiers and the function row each play their own recording.
+- [**Even volume**](https://halitsever.github.io/keycream/#how) - every key is leveled when a pack loads, so no single key is suddenly louder than the rest.
+- [**Natural typing**](https://halitsever.github.io/keycream/#how) - holding a key plays one click, and fast typing overlaps instead of cutting off.
+- [**Menu bar only**](https://halitsever.github.io/keycream/#using) - no Dock icon, it opens at login and remembers your settings.
+- [**Steps back when needed**](https://halitsever.github.io/keycream/guide/usage#lower-during-calls-and-media) - can drop to 5% while Zoom, Teams, Spotify and similar apps are open, play on an output of your choice, and turn on or off with a shortcut from any app.
+- [**12 languages**](https://halitsever.github.io/keycream/guide/usage#languages) - follows your Mac's language, or pick one in Settings.
+- [**Private**](https://halitsever.github.io/keycream/guide/privacy) - reads only which key went down, never what you type, and only goes online to check GitHub for updates.
+- [**Updates itself**](https://halitsever.github.io/keycream/guide/installation#update) - asks when a new release is out and installs it with one click.
+- [**Your own packs**](https://halitsever.github.io/keycream/guide/sound-packs#adding-your-own-pack) - KeyCream reads the Mechvibes pack format, so you can add any pack you like.
 
 <p align="center" >
 <img src="https://halitsever-api.vercel.app/api/installation"/>
