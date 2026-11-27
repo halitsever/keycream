@@ -19,7 +19,7 @@ macOS menu bar app (Swift, AppKit, SwiftUI settings window) that plays mechanica
 
 ## Docs and site
 
-- VitePress site in `docs/`, base path `/keycream/`, deployed to https://halitsever.github.io/keycream/ by `.github/workflows/docs.yml` on pushes to `main` that touch `docs/**`.
+- VitePress site in `docs/`, base path `/keycream/`, deployed to https://projects.halit.org/keycream/ by `.github/workflows/docs.yml` on pushes to `main` that touch `docs/**`.
 - SEO head tags, canonical URLs and JSON-LD are set in `docs/.vitepress/config.mts`. `docs/public/llms.txt` lists the docs pages; update it when a page is added or renamed.
 
 ## Conventions
