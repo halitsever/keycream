@@ -6,16 +6,16 @@ Download KeyCream-x.y.z.zip from https://github.com/halitsever/keycream/releases
 
 ## Docs
 
-- [Installation](https://halitsever.github.io/keycream/guide/installation): download, first launch, Input Monitoring permission and updates
-- [Using KeyCream](https://halitsever.github.io/keycream/guide/usage): the menu, the settings window, languages and lowering the volume during calls
-- [Sound packs](https://halitsever.github.io/keycream/guide/sound-packs): the bundled packs, their sources and how to add a Mechvibes pack
-- [Privacy](https://halitsever.github.io/keycream/guide/privacy): what the app reads and stores, and what goes online
-- [Troubleshooting](https://halitsever.github.io/keycream/guide/troubleshooting): fixes for common problems
-- [Building from source](https://halitsever.github.io/keycream/guide/building): build script options, releases and the website
-- [KeyCream vs Klack vs Mechvibes](https://halitsever.github.io/keycream/guide/keycream-vs-klack-vs-mechvibes): price, sound packs, platforms and where each app is stronger, checked 18 November 2026
+- [Installation](https://projects.halit.org/keycream/guide/installation): download, first launch, Input Monitoring permission and updates
+- [Using KeyCream](https://projects.halit.org/keycream/guide/usage): the menu, the settings window, languages and lowering the volume during calls
+- [Sound packs](https://projects.halit.org/keycream/guide/sound-packs): the bundled packs, their sources and how to add a Mechvibes pack
+- [Privacy](https://projects.halit.org/keycream/guide/privacy): what the app reads and stores, and what goes online
+- [Troubleshooting](https://projects.halit.org/keycream/guide/troubleshooting): fixes for common problems
+- [Building from source](https://projects.halit.org/keycream/guide/building): build script options, releases and the website
+- [KeyCream vs Klack vs Mechvibes](https://projects.halit.org/keycream/guide/keycream-vs-klack-vs-mechvibes): price, sound packs, platforms and where each app is stronger, checked 18 November 2026
 
 ## Optional
 
-- [Home](https://halitsever.github.io/keycream/): overview with sound samples
+- [Home](https://projects.halit.org/keycream/): overview with sound samples
 - [Source](https://github.com/halitsever/keycream): repository
 - [Releases](https://github.com/halitsever/keycream/releases): downloads and release notes

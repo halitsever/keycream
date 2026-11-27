@@ -1,7 +1,7 @@
 import { defineConfigWithTheme } from 'vitepress'
 import type { ThemeConfig } from './theme/types'
 
-const site = 'https://halitsever.github.io/keycream/'
+const site = 'https://projects.halit.org/keycream/'
 const description = 'Mechanical keyboard sounds for Mac. KeyCream is a free, open-source menu bar app that plays a real switch recording for every keystroke, with seven sound packs.'
 
 const repo = 'https://github.com/halitsever/keycream'
@@ -42,7 +42,7 @@ export default defineConfigWithTheme<ThemeConfig>({
   srcExclude: ['scripts/**', 'README.md'],
 
   head: [
-    /** Cloudflare Web Analytics, one token for every page on halitsever.github.io. */
+    /** Cloudflare Web Analytics, one token for every page on projects.halit.org. */
     ['script', { defer: '', src: 'https://static.cloudflareinsights.com/beacon.min.js', 'data-cf-beacon': '{"token": "dd7e54d3f48841c187d72d9dbb92a6b6"}' }],
     ['link', { rel: 'icon', href: '/keycream/favicon.ico', sizes: '32x32' }],
     ['link', { rel: 'icon', href: '/keycream/favicon.svg', type: 'image/svg+xml' }],
