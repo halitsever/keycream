@@ -14,7 +14,7 @@ faq:
     a: "That is personal. Some people like the smooth stroke; others prefer the bump of a tactile switch as a sign the key registered. Listening to and trying both is the only reliable way to choose."
 ---
 
-# Linear switches: what Cherry MX Red and Black sound like
+# Cherry MX Red, Black and other linear switches, by ear
 
 <p class="post-meta">Halit Sever · 28 November 2026</p>
 

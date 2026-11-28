@@ -14,7 +14,7 @@ faq:
     a: "Classic V1 packs, yes: KeyCream reads that format and its bundled packs come from Mechvibes. It does not read V2, has no import button, and needs WAV or another format macOS plays. A new pack is added by building KeyCream from source."
 ---
 
-# Mechvibes custom sounds: how sound packs work
+# How Mechvibes custom sound packs are put together
 
 <p class="post-meta">Halit Sever · 28 November 2026</p>
 

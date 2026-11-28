@@ -1,8 +1,9 @@
 ---
+title: "Privacy"
 description: What KeyCream does with your key presses, what it stores, and what this website loads.
 ---
 
-# Privacy
+# What KeyCream does with your key presses
 
 KeyCream turns key presses into sounds. To do that it needs to know when a key goes down. Here is exactly what happens with that information.
 

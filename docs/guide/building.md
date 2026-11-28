@@ -1,8 +1,9 @@
 ---
+title: "Building from source"
 description: Build KeyCream yourself, run the website locally and understand how releases are made.
 ---
 
-# Building from source
+# Building KeyCream from source
 
 ## Requirements
 

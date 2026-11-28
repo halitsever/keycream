@@ -14,7 +14,7 @@ faq:
     a: "Colors are a naming convention, mostly from Cherry: Red is a light linear, Black a heavy linear, Brown tactile, Blue clicky. Other makers use colors differently, so check the type and force on the spec sheet."
 ---
 
-# Keyboard switch types: linear, tactile, clicky
+# Linear, tactile or clicky: the three keyboard switch types
 
 <p class="post-meta">Halit Sever · 28 November 2026</p>
 

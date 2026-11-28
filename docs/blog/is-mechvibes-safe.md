@@ -14,7 +14,7 @@ faq:
     a: "Input Monitoring, so it can hear keys while another app is in front. Mechvibes also asks for Accessibility. KeyCream asks only for Input Monitoring."
 ---
 
-# Is Mechvibes safe? Keyboard sound apps and privacy
+# Mechvibes and privacy: what a keyboard sound app can see
 
 <p class="post-meta">Halit Sever · 28 November 2026</p>
 
