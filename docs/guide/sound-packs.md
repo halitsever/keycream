@@ -1,8 +1,9 @@
 ---
+title: "Sound packs"
 description: The seven bundled sound packs, where they come from, and how to add your own.
 ---
 
-# Sound packs
+# KeyCream's sound packs, and adding your own
 
 A sound pack is a recording of a real mechanical keyboard. KeyCream ships seven of them. Choose one from **Sound Pack** in the menu, or listen to them on the [home page](/#packs).
 

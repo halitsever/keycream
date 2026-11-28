@@ -1,8 +1,9 @@
 ---
+title: "Troubleshooting"
 description: "KeyCream troubleshooting for Mac: no key sounds, silence after an update, a blocked first launch, Open at Login, a missing sound pack or the wrong language."
 ---
 
-# Troubleshooting
+# Fixing common KeyCream problems
 
 ## There's no sound at all
 

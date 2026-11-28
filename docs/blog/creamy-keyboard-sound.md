@@ -14,7 +14,7 @@ faq:
     a: "KeyCream plays a recording of real NovelKeys Cream switches for each key you press on a Mac. It changes what you hear, not how the keys feel."
 ---
 
-# Creamy keyboard sound: what makes switches sound creamy
+# What makes a keyboard sound creamy?
 
 <p class="post-meta">Halit Sever · 28 November 2026</p>
 

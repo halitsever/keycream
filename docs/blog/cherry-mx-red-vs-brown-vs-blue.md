@@ -14,7 +14,7 @@ faq:
     a: "Red or Brown, since neither has a click. A Blue's click carries in a shared room. How hard you bottom out matters too."
 ---
 
-# Cherry MX Red vs Brown vs Blue: hear the difference
+# Hear Cherry MX Red, Brown and Blue side by side
 
 <p class="post-meta">Halit Sever · 28 November 2026</p>
 

@@ -14,7 +14,7 @@ faq:
     a: "KeyCream reads classic Mechvibes packs (the V1 config.json format) and its seven bundled packs come from the Mechvibes project. It does not read the V2 format that Mechvibes 3 uses, and a new pack goes in when you build KeyCream from source."
 ---
 
-# Mechvibes DX: what it is and a native Mac option
+# Mechvibes DX explained, plus a native Mac option
 
 <p class="post-meta">Halit Sever · 28 November 2026</p>
 

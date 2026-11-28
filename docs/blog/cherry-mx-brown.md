@@ -14,7 +14,7 @@ faq:
     a: "Both have the same travel. The Red is linear with 45 cN operating force and no bump; the Brown adds a light tactile bump. Listening to both recordings and, if you can, trying both is the best way to choose."
 ---
 
-# Cherry MX Brown sound and feel, explained
+# How a Cherry MX Brown feels and sounds
 
 <p class="post-meta">Halit Sever · 28 November 2026</p>
 

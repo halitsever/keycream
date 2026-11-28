@@ -1,8 +1,9 @@
 ---
+title: "Installation"
 description: Download KeyCream, open it for the first time and allow keyboard access.
 ---
 
-# Installation
+# Installing KeyCream on your Mac
 
 KeyCream runs on macOS 14 Sonoma or later, on both Apple Silicon and Intel Macs.
 

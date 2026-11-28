@@ -1,8 +1,9 @@
 ---
+title: "Using KeyCream"
 description: Everything in the KeyCream menu and settings window, and the settings it starts with.
 ---
 
-# Using KeyCream
+# The KeyCream menu and settings
 
 KeyCream lives in the menu bar, as a small keycap with cream dripping from it. The menu has what you change often. Everything else is in **Settings…**.
 

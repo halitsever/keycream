@@ -105,7 +105,7 @@ onBeforeUnmount(() => {
   <div class="home">
     <section class="hero" aria-labelledby="hero-title">
       <div class="wrap hero-copy">
-        <h1 id="hero-title" class="eyebrow">Mechanical keyboard sounds for Mac</h1>
+        <h1 id="hero-title" class="eyebrow">Real mechanical keyboard sounds on any Mac</h1>
         <p class="slogan">Every key<br /><span class="hl">goes thock.</span></p>
         <p class="hero-lede">
           KeyCream plays a real switch recording each time you press a key. It lives in your menu bar, it&rsquo;s free,
