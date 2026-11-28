@@ -13,6 +13,18 @@ Download KeyCream-x.y.z.zip from https://github.com/halitsever/keycream/releases
 - [Troubleshooting](https://projects.halit.org/keycream/guide/troubleshooting): fixes for common problems
 - [Building from source](https://projects.halit.org/keycream/guide/building): build script options, releases and the website
 - [KeyCream vs Klack vs Mechvibes](https://projects.halit.org/keycream/guide/keycream-vs-klack-vs-mechvibes): price, sound packs, platforms and where each app is stronger, checked 18 November 2026
+- [Keyboard switch sounds](https://projects.halit.org/keycream/sounds): type in the browser and hear all seven bundled recordings
+
+## Blog
+
+- [Mechvibes DX](https://projects.halit.org/keycream/blog/mechvibes-dx): the Rust rewrite that became Mechvibes 3, and a native Mac option
+- [Creamy keyboard sound](https://projects.halit.org/keycream/blog/creamy-keyboard-sound): what the word means and what changes the sound
+- [Linear switches](https://projects.halit.org/keycream/blog/linear-keyboard-switches): Cherry MX Red and Black specs and recordings
+- [Cherry MX Brown](https://projects.halit.org/keycream/blog/cherry-mx-brown): the tactile switch without a click
+- [Keyboard switch types](https://projects.halit.org/keycream/blog/keyboard-switch-types): linear, tactile and clicky
+- [Cherry MX Red vs Brown vs Blue](https://projects.halit.org/keycream/blog/cherry-mx-red-vs-brown-vs-blue): three switches compared
+- [Mechvibes custom sounds](https://projects.halit.org/keycream/blog/mechvibes-custom-sound-packs): the V1 and V2 pack formats
+- [Is Mechvibes safe?](https://projects.halit.org/keycream/blog/is-mechvibes-safe): permissions, telemetry and how to check a keyboard sound app
 
 ## Optional
 

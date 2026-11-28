@@ -5,6 +5,17 @@ const site = 'https://projects.halit.org/keycream/'
 const description = 'Mechanical keyboard sounds for Mac. KeyCream is a free, open-source menu bar app that plays a real switch recording for every keystroke, with seven sound packs.'
 
 const repo = 'https://github.com/halitsever/keycream'
+const blog: [string, string][] = [
+  ['mechvibes-dx', 'Mechvibes DX'],
+  ['creamy-keyboard-sound', 'Creamy keyboard sound'],
+  ['linear-keyboard-switches', 'Linear switches'],
+  ['cherry-mx-brown', 'Cherry MX Brown'],
+  ['keyboard-switch-types', 'Keyboard switch types'],
+  ['cherry-mx-red-vs-brown-vs-blue', 'Red vs Brown vs Blue'],
+  ['mechvibes-custom-sound-packs', 'Mechvibes custom sounds'],
+  ['is-mechvibes-safe', 'Is Mechvibes safe?'],
+]
+const halit = { '@type': 'Person', name: 'Halit Sever', url: 'https://halit.org' }
 const license = 'https://opensource.org/licenses/MIT'
 const author = { '@type': 'Person', name: 'Halit Sever', url: 'https://github.com/halitsever' }
 
@@ -59,13 +70,48 @@ export default defineConfigWithTheme<ThemeConfig>({
 
   transformPageData(pageData) {
     const title = pageData.frontmatter.title ?? pageData.title
-    const url = site + pageData.relativePath.replace(/(^|\/)index\.md$/, '$1').replace(/\.md$/, '')
+    const path = pageData.relativePath.replace(/(^|\/)index\.md$/, '$1').replace(/\.md$/, '')
+    const url = site + path
+    const desc = pageData.frontmatter.description ?? description
     pageData.frontmatter.head ??= []
+    const graph: Record<string, unknown>[] = []
+    if (path.startsWith('blog/') && path !== 'blog/') {
+      graph.push(
+        {
+          '@type': 'BlogPosting',
+          headline: title,
+          description: desc,
+          url,
+          mainEntityOfPage: url,
+          image: `${site}og.png`,
+          inLanguage: 'en',
+          datePublished: pageData.frontmatter.date,
+          dateModified: pageData.frontmatter.date,
+          author: halit,
+          publisher: halit,
+        },
+        {
+          '@type': 'BreadcrumbList',
+          itemListElement: [
+            { '@type': 'ListItem', position: 1, name: 'KeyCream', item: site },
+            { '@type': 'ListItem', position: 2, name: 'Blog', item: `${site}blog/` },
+            { '@type': 'ListItem', position: 3, name: title, item: url },
+          ],
+        },
+      )
+    } else if (path === 'blog/') {
+      graph.push({ '@type': 'Blog', name: 'KeyCream blog', description: desc, url, inLanguage: 'en', author: halit })
+    }
+    const faq = pageData.frontmatter.faq as { q: string; a: string }[] | undefined
+    if (faq?.length) {
+      graph.push({ '@type': 'FAQPage', mainEntity: faq.map((f) => ({ '@type': 'Question', name: f.q, acceptedAnswer: { '@type': 'Answer', text: f.a } })) })
+    }
+    if (graph.length) pageData.frontmatter.head.push(['script', { type: 'application/ld+json' }, JSON.stringify({ '@context': 'https://schema.org', '@graph': graph })])
     pageData.frontmatter.head.push(
       ['link', { rel: 'canonical', href: url }],
       ['meta', { property: 'og:url', content: url }],
-      ['meta', { property: 'og:title', content: pageData.frontmatter.layout === 'home' ? 'Mechanical keyboard sounds for Mac – KeyCream' : `${title} – KeyCream` }],
-      ['meta', { property: 'og:description', content: pageData.frontmatter.description ?? description }],
+      ['meta', { property: 'og:title', content: pageData.frontmatter.layout === 'home' ? 'Mechanical keyboard sounds for Mac – KeyCream' : pageData.frontmatter.titleTemplate === false ? title : `${title} – KeyCream` }],
+      ['meta', { property: 'og:description', content: desc }],
     )
   },
 
@@ -96,6 +142,7 @@ export default defineConfigWithTheme<ThemeConfig>({
       { text: 'Sound packs', link: '/#packs' },
       { text: 'Install', link: '/#install' },
       { text: 'Docs', link: '/guide/installation' },
+      { text: 'Blog', link: '/blog/' },
     ],
     sidebar: [
       {
@@ -119,7 +166,21 @@ export default defineConfigWithTheme<ThemeConfig>({
       },
       {
         text: 'Compare',
-        items: [{ text: 'KeyCream vs Klack vs Mechvibes', link: '/guide/keycream-vs-klack-vs-mechvibes' }],
+        items: [
+          { text: 'KeyCream vs Klack vs Mechvibes', link: '/guide/keycream-vs-klack-vs-mechvibes' },
+          { text: 'Keyboard switch sounds', link: '/sounds' },
+        ],
+      },
+    ],
+    blogSidebar: [
+      { text: 'Blog', items: [{ text: 'All posts', link: '/blog/' }, ...blog.map(([slug, text]) => ({ text, link: `/blog/${slug}` }))] },
+      {
+        text: 'KeyCream',
+        items: [
+          { text: 'Keyboard switch sounds', link: '/sounds' },
+          { text: 'Sound packs', link: '/guide/sound-packs' },
+          { text: 'Installation', link: '/guide/installation' },
+        ],
       },
     ],
   },

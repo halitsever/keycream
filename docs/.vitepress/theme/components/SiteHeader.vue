@@ -16,7 +16,7 @@ const anchorOf = (link: string) => link.split('#')[1] ?? ''
 function isOn(link: string) {
   const anchor = anchorOf(link)
   if (anchor) return frontmatter.value.layout === 'home' && section.value === anchor
-  return route.path.includes('/guide/')
+  return route.path.includes(link.startsWith('/blog') ? '/blog/' : '/guide/')
 }
 
 /** The section crossing the upper third of the screen counts as the one being read. */
