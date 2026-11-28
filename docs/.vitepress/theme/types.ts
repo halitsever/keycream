@@ -13,4 +13,6 @@ export interface ThemeConfig {
   repo: string
   nav: NavLink[]
   sidebar: SidebarGroup[]
+  /** Shown instead of `sidebar` on /blog/ pages. */
+  blogSidebar: SidebarGroup[]
 }

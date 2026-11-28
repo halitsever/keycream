@@ -10,7 +10,8 @@ const menuOpen = ref(false)
 const normalize = (path: string) => path.replace(/(\.html)?\/?$/, '')
 const isActive = (link: string) => normalize(withBase(link)) === normalize(route.path)
 
-const links = computed(() => theme.value.sidebar.flatMap((group) => group.items))
+const groups = computed(() => (route.path.includes('/blog/') ? theme.value.blogSidebar : theme.value.sidebar))
+const links = computed(() => groups.value.flatMap((group) => group.items))
 const index = computed(() => links.value.findIndex((item) => isActive(item.link)))
 const previous = computed(() => (index.value > 0 ? links.value[index.value - 1] : null))
 const next = computed(() => (index.value >= 0 && index.value < links.value.length - 1 ? links.value[index.value + 1] : null))
@@ -30,7 +31,7 @@ watch(() => route.path, () => (menuOpen.value = false))
         </svg>
       </button>
       <nav id="doc-menu" class="menu" :class="{ open: menuOpen }" aria-label="Documentation">
-        <div v-for="group in theme.sidebar" :key="group.text" class="group">
+        <div v-for="group in groups" :key="group.text" class="group">
           <p class="group-title">{{ group.text }}</p>
           <ul>
             <li v-for="item in group.items" :key="item.link">

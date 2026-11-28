@@ -240,3 +240,27 @@
   font-weight: 620;
   cursor: pointer;
 }
+
+.prose .post-meta {
+  margin-top: -0.6rem;
+  font-size: 0.92rem;
+  color: var(--faint);
+}
+
+.prose .post-list {
+  padding-left: 0;
+  list-style: none;
+}
+
+.prose .post-list li {
+  margin: 0 0 1.25rem;
+}
+
+.prose .post-list a {
+  font-weight: 650;
+}
+
+.prose .post-list p {
+  margin: 0.25rem 0 0;
+  color: var(--dim);
+}
