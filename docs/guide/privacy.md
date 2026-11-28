@@ -41,7 +41,8 @@ Nothing else is written to disk.
 
 ## This website
 
-- No analytics, no tracking, no cookies.
+- Visits are counted with [Cloudflare Web Analytics](https://www.cloudflare.com/web-analytics/), loaded from `static.cloudflareinsights.com`. It sets no cookies and does not fingerprint visitors. It records page views with the page, the referring site, and the browser, device type and country of the visit.
+- No ads and no other tracking. The site itself sets no cookies.
 - Fonts and sounds are served from this site. Nothing is loaded from font or ad services.
 - The download button asks GitHub's API for the latest release, so your browser sends one request to `api.github.com`.
 - Your browser remembers whether you muted the keyboard demo, in its local storage on your device.
