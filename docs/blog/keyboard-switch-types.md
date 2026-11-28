@@ -81,3 +81,4 @@ The [switch sound board](/sounds) lets you type with each of the seven recording
 - [Creamy keyboard sound](/blog/creamy-keyboard-sound): what people mean by it
 - [Linear switches](/blog/linear-keyboard-switches): Red, Black and NovelKeys Cream
 - [Keyboard switch sounds](/sounds): type on all seven recordings
+- [Tactile vs linear switches](/blog/tactile-vs-linear-switches): the two quiet types side by side

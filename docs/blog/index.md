@@ -41,4 +41,28 @@ Articles about how mechanical keyboard switches sound and about the apps that pl
     <a href="./is-mechvibes-safe">Is Mechvibes safe? Keyboard sound apps and privacy</a>
     <p>What a keyboard sound app has to read, what Mechvibes sends, and how to check.</p>
   </li>
+  <li>
+    <a href="./cherry-mx-blue">Cherry MX Blue: the clicky switch, explained</a>
+    <p>How the two-part stem clicks, Cherry's specs and a recording.</p>
+  </li>
+  <li>
+    <a href="./cherry-mx-black">Cherry MX Black: Cherry's heavy linear switch</a>
+    <p>The full force curve, Black vs Red, and a recording.</p>
+  </li>
+  <li>
+    <a href="./clicky-switches">Clicky switches: where the click comes from</a>
+    <p>How the click is made and how to tell clicky from tactile by ear.</p>
+  </li>
+  <li>
+    <a href="./tactile-vs-linear-switches">Tactile vs linear switches: what the bump changes</a>
+    <p>Feel, sound and Cherry's figures, with recordings of both.</p>
+  </li>
+  <li>
+    <a href="./thocky-keyboard">What is thock? Thocky and clacky keyboards</a>
+    <p>What the words mean, what changes the sound, and three recordings.</p>
+  </li>
+  <li>
+    <a href="./asmr-keyboard">ASMR keyboard sounds on a Mac</a>
+    <p>Videos, a mechanical keyboard or real recordings as you type.</p>
+  </li>
 </ul>

@@ -14,6 +14,12 @@ const blog: [string, string][] = [
   ['cherry-mx-red-vs-brown-vs-blue', 'Red vs Brown vs Blue'],
   ['mechvibes-custom-sound-packs', 'Mechvibes custom sounds'],
   ['is-mechvibes-safe', 'Is Mechvibes safe?'],
+  ['cherry-mx-blue', 'Cherry MX Blue'],
+  ['cherry-mx-black', 'Cherry MX Black'],
+  ['clicky-switches', 'Clicky switches'],
+  ['tactile-vs-linear-switches', 'Tactile vs linear'],
+  ['thocky-keyboard', 'What is thock?'],
+  ['asmr-keyboard', 'ASMR keyboard sounds'],
 ]
 const halit = { '@type': 'Person', name: 'Halit Sever', url: 'https://halit.org' }
 const license = 'https://opensource.org/licenses/MIT'
