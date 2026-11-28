@@ -25,6 +25,12 @@ Download KeyCream-x.y.z.zip from https://github.com/halitsever/keycream/releases
 - [Cherry MX Red vs Brown vs Blue](https://projects.halit.org/keycream/blog/cherry-mx-red-vs-brown-vs-blue): three switches compared
 - [Mechvibes custom sounds](https://projects.halit.org/keycream/blog/mechvibes-custom-sound-packs): the V1 and V2 pack formats
 - [Is Mechvibes safe?](https://projects.halit.org/keycream/blog/is-mechvibes-safe): permissions, telemetry and how to check a keyboard sound app
+- [Cherry MX Blue](https://projects.halit.org/keycream/blog/cherry-mx-blue): the clicky switch, its click mechanism and specs
+- [Cherry MX Black](https://projects.halit.org/keycream/blog/cherry-mx-black): the heavy linear switch and how it differs from Red
+- [Clicky switches](https://projects.halit.org/keycream/blog/clicky-switches): how the click works and how it sounds
+- [Tactile vs linear switches](https://projects.halit.org/keycream/blog/tactile-vs-linear-switches): feel, sound and specs compared
+- [What is thock?](https://projects.halit.org/keycream/blog/thocky-keyboard): thocky, clacky and creamy keyboard sounds
+- [ASMR keyboard sounds on a Mac](https://projects.halit.org/keycream/blog/asmr-keyboard): three ways to get the sound, and keeping it quiet
 
 ## Optional
 

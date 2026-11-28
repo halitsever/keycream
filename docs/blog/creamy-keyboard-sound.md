@@ -82,3 +82,4 @@ A laptop keyboard will not sound creamy, and no software changes how it feels. W
 - [Keyboard switch types](/blog/keyboard-switch-types): linear, tactile and clicky
 - [Keyboard switch sounds](/sounds): all seven recordings, typed live
 - [Sound packs](/guide/sound-packs): where KeyCream's recordings come from
+- [What is thock?](/blog/thocky-keyboard): the deeper cousin of creamy

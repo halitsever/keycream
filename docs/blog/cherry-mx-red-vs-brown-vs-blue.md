@@ -81,3 +81,4 @@ Personal taste decides the rest. KeyCream's three Everglide and NovelKeys packs 
 - [Cherry MX Brown](/blog/cherry-mx-brown): the middle switch in detail
 - [Linear switches](/blog/linear-keyboard-switches): Red, Black and NovelKeys Cream
 - [Keyboard switch sounds](/sounds): type on every recording
+- [Cherry MX Blue](/blog/cherry-mx-blue): the clicky one on its own, with Cherry's specs

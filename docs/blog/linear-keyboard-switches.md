@@ -76,3 +76,4 @@ Magnetic (Hall effect) switches are a separate category that comes up in the sam
 - [Cherry MX Red vs Brown vs Blue](/blog/cherry-mx-red-vs-brown-vs-blue): three switches, three sounds
 - [Creamy keyboard sound](/blog/creamy-keyboard-sound): what people mean by the word
 - [Keyboard switch sounds](/sounds): type on all seven recordings
+- [Cherry MX Black](/blog/cherry-mx-black): the heavier of the two, in detail

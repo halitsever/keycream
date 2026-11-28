@@ -81,3 +81,4 @@ Without a click, a Brown's sound is mostly the stem hitting the bottom and sprin
 - [Keyboard switch types](/blog/keyboard-switch-types): linear, tactile and clicky
 - [Keyboard switch sounds](/sounds): type on all seven recordings
 - [Sound packs](/guide/sound-packs): where the recordings come from
+- [Clicky switches](/blog/clicky-switches): the same bump with a click added
